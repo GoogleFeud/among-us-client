@@ -1,0 +1,32 @@
+{
+  "name": "among-us-client",
+  "version": "0.0.1",
+  "description": "Read and modify data from an among us game",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GoogleFeud/among-us-client.git"
+  },
+  "keywords": [
+    "among",
+    "us",
+    "client"
+  ],
+  "author": "GoogleFeud",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/GoogleFeud/among-us-client/issues"
+  },
+  "homepage": "https://github.com/GoogleFeud/among-us-client#readme",
+  "devDependencies": {
+    "@types/node": "^14.14.13",
+    "@typescript-eslint/eslint-plugin": "^4.9.1",
+    "@typescript-eslint/parser": "^4.9.1",
+    "eslint": "^7.15.0",
+    "typescript": "^4.1.3"
+  }
+}
