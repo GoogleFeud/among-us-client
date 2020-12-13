@@ -1,16 +1,21 @@
 import {AmongUsProcess} from "./Structures/AmongUsProcess";
+import { Game } from "./Structures/Game";
 
-/** 
+
 AmongUsProcess.scan((p) => {
     console.log("Connected!");
-    setInterval(() => {
-        console.log(p.state);
-    }, 250);
-}, 1000, false);
-*/
+    
+    p.on("joinGame", (game: Game) => {
+        console.log("Game joined: ", game.code);
+        console.log(game.getPlayerSpeed());
+    });
 
-console.log(AmongUsProcess.getVersion());
-setInterval(() => {
-    const processes = AmongUsProcess.all();
-    console.log(processes);
-}, 1000);
+    p.on("leaveGame", (game: Game) => {
+        console.log("Game left: ", game.code);
+    });
+
+    p.on("close", () => {
+        console.log("Process closed!");
+    });
+}, 1000, true);
+

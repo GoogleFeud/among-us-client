@@ -9,5 +9,6 @@ export interface AddressData {
     meetingHud: Array<number>,
     meetingHudCachePtr: Array<number>,
     meetingHudState: Array<number>,
+    gameCode: Array<number>,
     settings: AddressDataSettings
 }
