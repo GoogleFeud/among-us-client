@@ -7,7 +7,7 @@ Get and modify data from a local among us game. This library was **NOT** made so
 ```js
 const AmongUsProcess = require("among-us-client");
 
-// Calls the callback function when an among us process if found
+// Calls the callback function when an among us process is found
 AmongUsProcess.scan((p) => {
     console.log("Connected!");
     
