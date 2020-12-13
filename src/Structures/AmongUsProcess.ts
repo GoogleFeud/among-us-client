@@ -1,19 +1,22 @@
 
 import * as MemoryJS from "memoryjs";
 import {AMONG_US_STATES} from "../util/Constants";
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const addresses = require("../../data/2020.12.9.json");
+import {AddressData} from "../util/AmongUsAddressData";
+import * as path from "path";
+import * as fs from "fs";
 
 export type ScanCallback = (pc: AmongUsProcess) => void
 
 export class AmongUsProcess {
     private process: MemoryJS.ProcessObject
     private asm: MemoryJS.ModuleObject
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    addresses: AddressData
 
     constructor(process: MemoryJS.ProcessObject, asm: MemoryJS.ModuleObject) {
         this.process = process;
         this.asm = asm;
+        this.addresses = require(`../../data/${AmongUsProcess.version}.json`);
     }
 
     static all() : Array<AmongUsProcess> {
@@ -36,10 +39,10 @@ export class AmongUsProcess {
     }
 
     get state() : number {
-        const meetingHud = this.readMemory<number>("pointer", this.asm.modBaseAddr, addresses.meetingHud);
-        const meetingHud_cachePtr = meetingHud === 0 ? 0 : this.readMemory<number>("uint32", meetingHud, addresses.meetingHudCachePtr);
-        const meetingHudState = meetingHud_cachePtr === 0 ? 4 : this.readMemory("int", meetingHud, addresses.meetingHudState, 4);
-        const state = this.readMemory("int", this.asm.modBaseAddr, addresses.gameState);
+        const meetingHud = this.readMemory<number>("pointer", this.asm.modBaseAddr, this.addresses.meetingHud);
+        const meetingHud_cachePtr = meetingHud === 0 ? 0 : this.readMemory<number>("uint32", meetingHud, this.addresses.meetingHudCachePtr);
+        const meetingHudState = meetingHud_cachePtr === 0 ? 4 : this.readMemory("int", meetingHud, this.addresses.meetingHudState, 4);
+        const state = this.readMemory("int", this.asm.modBaseAddr, this.addresses.gameState);
         switch(state) {
         case 0: return AMONG_US_STATES.MENU;
         case 1: 
@@ -50,6 +53,18 @@ export class AmongUsProcess {
             else return AMONG_US_STATES.TASKS;
         }
     }
+
+    static getVersion() : string|null {
+        const unityAnalytics = path.resolve(`${(process.env.LOCALAPPDATA || "")}Low`, "Innersloth/Among Us/Unity/6b8b0d91-4a20-4a00-a3e4-4da4a883a5f0/Analytics/values");
+        if (!fs.existsSync(unityAnalytics)) return null;
+        try {
+            return JSON.parse(fs.readFileSync(unityAnalytics, "utf-8")).app_ver;
+        } catch(err) {
+            return null;
+        } 
+    }
+
+    static version = "2020.12.9";
 
     offsetAddress(address: number, offsets: number[]): number {
         if (!address || !this.process) return 0;

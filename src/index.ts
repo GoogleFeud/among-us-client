@@ -9,6 +9,7 @@ AmongUsProcess.scan((p) => {
 }, 1000, false);
 */
 
+console.log(AmongUsProcess.getVersion());
 setInterval(() => {
     const processes = AmongUsProcess.all();
     console.log(processes);
