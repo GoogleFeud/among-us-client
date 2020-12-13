@@ -16,6 +16,14 @@ export class AmongUsProcess {
         this.asm = asm;
     }
 
+    static all() : Array<AmongUsProcess> {
+        const processes = [];
+        for (const process of MemoryJS.getProcesses()) {
+            if (process.szExeFile === "Among Us.exe") processes.push(new AmongUsProcess(MemoryJS.openProcess("Among Us.exe"), MemoryJS.findModule("GameAssembly.dll", process.th32ProcessID)));
+        }
+        return processes;
+    }
+
     static scan(cb: ScanCallback, interval = 250, cancelOnFirstFind = true) : void {
         const foundProcesses: Array<number> = [];
         const inv = setInterval(() => {
