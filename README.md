@@ -18,7 +18,8 @@ Get and modify data from a local among us game. This library was **NOT** made so
 For now you can:
 - Clone or download this repository
 - Install all dependencies and dev-dependencies (`npm i`) 
-- Transpile the source code to javascript (`tsc`)
+- Transpile the source code to javascript, if you don't use typescript (`tsc`)
+- Import the AmongUsProcess where you need it!
 
 ## Example
 
