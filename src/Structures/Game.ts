@@ -38,6 +38,18 @@ export class Game {
         );
     }
 
+    getImpostors() : number {
+        return this.process.readMemory("int", this.process.asm.modBaseAddr, this.process.addresses.settings.impostors, 0);
+    }
+
+    setImpostors(impostors: number) : void {
+        MemoryJS.writeMemory(this.process.process.handle, 
+            this.process.offsetAddress(this.process.asm.modBaseAddr, this.process.addresses.settings.impostors),
+            impostors,
+            "int"
+        );
+    }
+
     getTotalTasks() : number {
         return this.process.readMemory("int", this.process.asm.modBaseAddr, this.process.addresses.game.tasksTotal, 0);
     }
