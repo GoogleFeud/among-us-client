@@ -1,6 +1,6 @@
 
 import * as MemoryJS from "memoryjs";
-import {AMONG_US_STATES} from "../util/Constants";
+import {AMONG_US_STATES, MEETING_STATES} from "../util/Constants";
 import {AddressData} from "../util/AmongUsAddressData";
 import * as path from "path";
 import * as fs from "fs";
@@ -21,6 +21,7 @@ export class AmongUsProcess extends EventEmitter {
         this.asm = asm;
         this.addresses = require(`../../data/${AmongUsProcess.version}.json`);
 
+        let lastMeetingState = -1;
         const interval = setInterval(() => {
             // Step 1: Check if the among us process that is connected to this instance has been closed
             if (!MemoryJS.getProcesses().some(p => p.th32ProcessID === this.process.th32ProcessID)) {
@@ -30,33 +31,62 @@ export class AmongUsProcess extends EventEmitter {
             }
 
             // Step 2: Get the game state 
-            const state = this.state;
+            const {state, meetingHudState} = this.state;
             // If the player is in the menu but there is a game object
             if (state === AMONG_US_STATES.MENU && this.game) {
+                // If the game has started, also emit the endGame event.
+                if (this.game.started) this.emit("endGame", this.game, false);
                 this.emit("leaveGame", this.game);
                 delete this.game;
-            } else if (state === AMONG_US_STATES.LOBBY && !this.game) {
+            } 
+            else if (state === AMONG_US_STATES.LOBBY && !this.game) {
                 this.game = new Game(this);
                 // Without the timeout, if you get game settings inside the event, they will be from the previous game. 
-                setTimeout(() => this.emit("joinGame", this.game), 250);
+                setTimeout(() => this.emit("joinGame", this.game), 500);
             }
 
+            // Step 3: If the current game state is TASKS, and game.started = false, make game.started = true
+            else if (this.game && state === AMONG_US_STATES.TASKS && !this.game.started) {
+                this.game.started = true;
+                this.emit("startGame", this.game);
+            }
+
+            // Step 4: If the current game state is LOBBY
+            else if (this.game && state === AMONG_US_STATES.LOBBY && this.game.started) {
+                this.emit("endGame", this.game, true);
+                this.game.started = false;
+            }
+
+            if (this.game && meetingHudState !== lastMeetingState) {
+                this.game.meetingState = meetingHudState;
+                switch (meetingHudState) {
+                case MEETING_STATES.DISCUSSION:
+                    this.emit("meetingDiscussion", this.game);
+                    break;
+                case MEETING_STATES.VOTING:
+                    this.emit("meetingVoting", this.game);
+                    break;
+                case MEETING_STATES.RESULTS:
+                    this.emit("meetingResults", this.game);
+                }
+                lastMeetingState = meetingHudState;
+            }
         }, 750);
     }
 
-    get state() : number {
+    get state() : {meetingHudState: MEETING_STATES, state: AMONG_US_STATES} {
         const meetingHud = this.readMemory<number>("pointer", this.asm.modBaseAddr, this.addresses.meetingHud);
         const meetingHud_cachePtr = meetingHud === 0 ? 0 : this.readMemory<number>("uint32", meetingHud, this.addresses.meetingHudCachePtr);
-        const meetingHudState = meetingHud_cachePtr === 0 ? 4 : this.readMemory("int", meetingHud, this.addresses.meetingHudState, 4);
+        const meetingHudState = meetingHud_cachePtr === 0 ? -1 : this.readMemory("int", meetingHud, this.addresses.meetingHudState, 4);
         const state = this.readMemory("int", this.asm.modBaseAddr, this.addresses.game.state);
         switch(state) {
-        case 0: return AMONG_US_STATES.MENU;
+        case 0: return {meetingHudState: meetingHudState, state: AMONG_US_STATES.MENU};
         case 1: 
         case 3:
-            return AMONG_US_STATES.LOBBY;
+            return {state: AMONG_US_STATES.LOBBY, meetingHudState: meetingHudState};
         default:
-            if (meetingHudState < 4) return AMONG_US_STATES.DISCUSSION;
-            else return AMONG_US_STATES.TASKS;
+            if (meetingHudState > -1) return {state: AMONG_US_STATES.DISCUSSION, meetingHudState: meetingHudState};
+            else return {state: AMONG_US_STATES.TASKS, meetingHudState: meetingHudState};
         }
     }
 

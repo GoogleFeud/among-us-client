@@ -11,10 +11,16 @@ export interface GameDataSettings {
     tasksCompleted: Array<number>
 }
 
+export interface PlayerDataSettings {
+    allPlayersPtr: Array<number>,
+    allPlayers: Array<number>
+}
+
 export interface AddressData {
     game: GameDataSettings
     meetingHud: Array<number>,
     meetingHudCachePtr: Array<number>,
     meetingHudState: Array<number>,
-    settings: AddressDataSettings
+    settings: AddressDataSettings,
+    player: PlayerDataSettings
 }

@@ -9,12 +9,16 @@
         "state": [29720404, 92, 0, 100],
         "code": [28254460, 92, 0, 32, 40],
         "tasksTotal": [29719528, 92, 0, 40],
-        "tasksCompleted": [29719528, 92, 0, 44]
+        "tasksCompleted": [29719528, 92, 0, 44],
+        "discussionTime": [29717412, 92, 0, 160]
     },
     "settings": {
         "speed": [29709768, 92, 20, 20]
     },
     "player": {
-        
+        "allPlayersPtr": [29719528, 92, 0, 36],
+        "allPlayers": [8],
+        "playerCount": [12],
+        "playerAddrPtr": 16
     }
 }
