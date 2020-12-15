@@ -2,6 +2,8 @@
 
 Get and modify data from a local among us game. This library was **NOT** made so you can cheat in public lobbies. That's for losers. 
 
+**This library is NOWHERRE near complete. There are a few known bugs such as the code of a game sometimes being undefined**
+
 ## Example
 
 ```js
@@ -17,7 +19,7 @@ AmongUsProcess.scan((p) => {
         console.log("Game joined: ", game.code);
         // Sets the lobby's "Player Speed" setting to 10. Works only if the player is the lobby host.
         game.setPlayerSpeed(10);
-        
+
     });
 
     // Calls the callback when the user leaves a game
@@ -36,5 +38,24 @@ AmongUsProcess.scan((p) => {
     });
 });
 
-
 ```
+
+Some other useful events and methods:
+```
+endGame
+meetingDiscussion
+meetingVoting
+meetingResults
+game.getTotalTasks()
+game.getCompletedTasks()
+game.getPlayerSpeed()
+```
+
+## Plans
+
+- Player info - impostors, in vents, on cameras, positions.
+- Change color
+- Change other game settings
+- Change name
+- Change speed in game
+- Report any body of player (even alive)
