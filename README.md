@@ -49,6 +49,8 @@ meetingResults
 game.getTotalTasks()
 game.getCompletedTasks()
 game.getPlayerSpeed()
+game.getEmergencyMeetings()
+game.setEmergencyMeetings(meetings)
 ```
 
 ## Plans

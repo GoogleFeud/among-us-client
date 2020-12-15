@@ -13,7 +13,8 @@
         "discussionTime": [29717412, 92, 0, 160]
     },
     "settings": {
-        "speed": [29709768, 92, 20, 20]
+        "speed": [29709768, 92, 20, 20],
+        "emergencyMeetings": [29663276, 92, 52, 48]
     },
     "player": {
         "allPlayersPtr": [29719528, 92, 0, 36],

@@ -26,6 +26,18 @@ export class Game {
         return this.process.readMemory("float", this.process.asm.modBaseAddr, this.process.addresses.settings.speed, 0);
     }
 
+    getEmergencyMeetings() : number {
+        return this.process.readMemory("int", this.process.asm.modBaseAddr, this.process.addresses.settings.emergencyMeetings, 0);
+    }
+
+    setEmergencyMeetings(meetings: number) : void {
+        MemoryJS.writeMemory(this.process.process.handle, 
+            this.process.offsetAddress(this.process.asm.modBaseAddr, this.process.addresses.settings.emergencyMeetings),
+            meetings,
+            "int"
+        );
+    }
+
     getTotalTasks() : number {
         return this.process.readMemory("int", this.process.asm.modBaseAddr, this.process.addresses.game.tasksTotal, 0);
     }

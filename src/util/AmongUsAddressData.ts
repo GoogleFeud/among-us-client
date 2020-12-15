@@ -1,7 +1,8 @@
 
 
 export interface AddressDataSettings {
-    speed: Array<number>
+    speed: Array<number>,
+    emergencyMeetings: Array<number>
 }
 
 export interface GameDataSettings {

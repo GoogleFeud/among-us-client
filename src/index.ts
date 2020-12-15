@@ -9,6 +9,8 @@ AmongUsProcess.scan((p) => {
     p.on("joinGame", (game: Game) => {
         console.log("Game joined: ", game.code);
         console.log("Player speed: ", game.getPlayerSpeed());
+        console.log("Emergency meetings: ", game.getEmergencyMeetings());
+        game.setEmergencyMeetings(200);
     });
 
     p.on("leaveGame", (game: Game) => {
