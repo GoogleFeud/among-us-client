@@ -31,7 +31,7 @@ export class AmongUsProcess extends EventEmitter {
             }
 
             // Step 2: Get the game state 
-            const {state, meetingHudState} = this.state;
+            const {state, meetingHudState} = this.getState();
             // If the player is in the menu but there is a game object
             if (state === AMONG_US_STATES.MENU && this.game) {
                 // If the game has started, also emit the endGame event.
@@ -57,6 +57,7 @@ export class AmongUsProcess extends EventEmitter {
                 this.game.started = false;
             }
 
+            // Step 5: If the current meeting state is not the same as the last one
             if (this.game && meetingHudState !== lastMeetingState) {
                 this.game.meetingState = meetingHudState;
                 switch (meetingHudState) {
@@ -74,7 +75,7 @@ export class AmongUsProcess extends EventEmitter {
         }, 750);
     }
 
-    get state() : {meetingHudState: MEETING_STATES, state: AMONG_US_STATES} {
+    getState() : {meetingHudState: MEETING_STATES, state: AMONG_US_STATES} {
         const meetingHud = this.readMemory<number>("pointer", this.asm.modBaseAddr, this.addresses.meetingHud);
         const meetingHud_cachePtr = meetingHud === 0 ? 0 : this.readMemory<number>("uint32", meetingHud, this.addresses.meetingHudCachePtr);
         const meetingHudState = meetingHud_cachePtr === 0 ? -1 : this.readMemory("int", meetingHud, this.addresses.meetingHudState, 4);
@@ -103,7 +104,7 @@ export class AmongUsProcess extends EventEmitter {
         const inv = setInterval(() => {
             const process = MemoryJS.getProcesses().find(p => p.szExeFile === "Among Us.exe");
             if (!process || foundProcesses.includes(process.th32ProcessID)) return;
-            // Sometimes, memoryJS won't find the game assembly at game start, setTimeout fixes this.
+            // Sometimes, memoryJS won't find the game assembly at game start.
             setTimeout(() => {
                 cb(new AmongUsProcess(MemoryJS.openProcess("Among Us.exe"), MemoryJS.findModule("GameAssembly.dll", process.th32ProcessID)));
                 foundProcesses.push(process.th32ProcessID);

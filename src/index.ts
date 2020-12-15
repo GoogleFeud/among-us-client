@@ -11,6 +11,8 @@ AmongUsProcess.scan((p) => {
         console.log("Player speed: ", game.getPlayerSpeed());
         console.log("Emergency meetings: ", game.getEmergencyMeetings());
         console.log("Impostors: ", game.getImpostors());
+        console.log("Common Tasks: ", game.getCommonTasks());
+        game.setCommonTasks(1000);
     });
 
     p.on("leaveGame", (game: Game) => {
@@ -28,6 +30,7 @@ AmongUsProcess.scan((p) => {
             console.log("Tasks left: ", p.game.getTotalTasks() - p.game.getCompletedTasks());
             console.log("Speed: ", game.getPlayerSpeed());
             console.log("Impostors: ", game.getImpostors());
+            console.log("Common Tasks:", game.getCommonTasks());
         }, 10000);
     });
 
@@ -49,4 +52,3 @@ AmongUsProcess.scan((p) => {
     });
 
 }, 1000, true);
-

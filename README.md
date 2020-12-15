@@ -2,62 +2,59 @@
 
 Get and modify data from a local among us game. This library was **NOT** made so you can cheat in public lobbies. That's for losers. 
 
-**This library is NOWHERRE near complete. There are a few known bugs such as the code of a game sometimes being undefined**
+**This library is NOWHERRE near stable. There some known bugs and also a ton of missing features.**
+
+## Install
+
+### Requirements
+
+- Windows
+- Latest among us version (2020.12.9)
+- Node.js 14+
+
+### Install
+
+**This library will be published to npm when we think it's ready.**  
+For now you can:
+- Clone or download this repository
+- Install all dependencies and dev-dependencies (`npm i`) 
+- Transpile the source code to javascript (`tsc`)
 
 ## Example
 
 ```js
 const AmongUsProcess = require("among-us-client");
 
-// Calls the callback function when an among us process is found
-AmongUsProcess.scan((p) => {
-    console.log("Connected!");
+// Scan for an among us process
+AmongUsProcess.scan((proc) => {
+    console.log("Connected to an among us process!");
     
-
-    // Calls the callback when the user joins a game
-    p.on("joinGame", (game) => {
-        console.log("Game joined: ", game.code);
-        // Sets the lobby's "Player Speed" setting to 10. Works only if the player is the lobby host.
-        game.setPlayerSpeed(10);
-
+    proc.on("joinGame", (game) => {
+        console.log(`User joined a game with code ${game.code}`);
+        // Set the player speed 
+        game.setPlayerSpeed(10); // Super super fast!
     });
 
-    // Calls the callback when the user leaves a game
-    p.on("leaveGame", (game) => {
-        console.log("Game left: ", game.code);
+    proc.on("leaveGame", (game) => {
+        console.log(`User left a game with code ${game.code}`);
     });
 
-    // Calls the callback when the user disconnects
-    p.on("close", () => {
-        console.log("Process closed!");
+    proc.on("startGame", (game) => {
+        console.log(`Game with code ${game.code} is starting!`);
     });
 
-    // When the game starts
-    p.on("startGame", (game) => {
-
+    proc.on("endGame", (game) => {
+        console.log(`Game with code ${game.code} has ended!`);
     });
+
+    proc.on("close", () => {
+        console.log(`User closed Among Us!`);
+    });
+
 });
 
 ```
 
-Some other useful events and methods:
-```
-endGame
-meetingDiscussion
-meetingVoting
-meetingResults
-game.getTotalTasks()
-game.getCompletedTasks()
-game.getPlayerSpeed()
-game.getEmergencyMeetings()
-game.setEmergencyMeetings(meetings)
-```
+## Documentation
 
-## Plans
-
-- Player info - impostors, in vents, on cameras, positions.
-- Change color
-- Change other game settings
-- Change name
-- Change speed in game
-- Report any body of player (even alive)
+Coming soon!

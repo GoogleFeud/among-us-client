@@ -14,6 +14,9 @@ export class Game {
         this.meetingState = -1;
     }
 
+
+    //------ Get and set player speed. ------
+
     setPlayerSpeed(speed: number) : void {
         MemoryJS.writeMemory(this.process.process.handle, 
             this.process.offsetAddress(this.process.asm.modBaseAddr, this.process.addresses.settings.speed),
@@ -25,6 +28,8 @@ export class Game {
     getPlayerSpeed() : number {
         return this.process.readMemory("float", this.process.asm.modBaseAddr, this.process.addresses.settings.speed, 0);
     }
+
+    //------- Get and set emergency meetings. ------
 
     getEmergencyMeetings() : number {
         return this.process.readMemory("int", this.process.asm.modBaseAddr, this.process.addresses.settings.emergencyMeetings, 0);
@@ -38,6 +43,8 @@ export class Game {
         );
     }
 
+    //------ Get and set impostor count. ------
+
     getImpostors() : number {
         return this.process.readMemory("int", this.process.asm.modBaseAddr, this.process.addresses.settings.impostors, 0);
     }
@@ -49,6 +56,22 @@ export class Game {
             "int"
         );
     }
+
+    //------- Get and set the amount of common tasks. ------
+
+    getCommonTasks() : number {
+        return this.process.readMemory("int", this.process.asm.modBaseAddr, this.process.addresses.settings.commonTasks, 0);
+    }
+
+    setCommonTasks(tasks: number) : void {
+        MemoryJS.writeMemory(this.process.process.handle, 
+            this.process.offsetAddress(this.process.asm.modBaseAddr, this.process.addresses.settings.commonTasks),
+            tasks,
+            "int"
+        );
+    }
+
+    //----- Get total and completed tasks. Total - completed = not completed. -----
 
     getTotalTasks() : number {
         return this.process.readMemory("int", this.process.asm.modBaseAddr, this.process.addresses.game.tasksTotal, 0);
