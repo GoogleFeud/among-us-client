@@ -4,11 +4,17 @@ export interface AddressDataSettings {
     speed: Array<number>
 }
 
+export interface GameDataSettings {
+    state: Array<number>,
+    code: Array<number>,
+    tasksTotal: Array<number>,
+    tasksCompleted: Array<number>
+}
+
 export interface AddressData {
-    gameState: Array<number>,
+    game: GameDataSettings
     meetingHud: Array<number>,
     meetingHudCachePtr: Array<number>,
     meetingHudState: Array<number>,
-    gameCode: Array<number>,
     settings: AddressDataSettings
 }

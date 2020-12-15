@@ -12,19 +12,19 @@ AmongUsProcess.scan((p) => {
     console.log("Connected!");
     
 
-    // Calls the callback when the player joins a game
+    // Calls the callback when the user joins a game
     p.on("joinGame", (game: Game) => {
         console.log("Game joined: ", game.code);
         // Sets the lobby's "Player Speed" setting to 10. Works only if the player is the lobby host.
         game.setPlayerSpeed(10);
     });
 
-    // Calls the callback when a player leaves a game
+    // Calls the callback when the user leaves a game
     p.on("leaveGame", (game: Game) => {
         console.log("Game left: ", game.code);
     });
 
-    // Calls the callback when a player disconnects
+    // Calls the callback when the user disconnects
     p.on("close", () => {
         console.log("Process closed!");
     });

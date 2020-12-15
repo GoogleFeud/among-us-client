@@ -29,20 +29,14 @@ export class AmongUsProcess extends EventEmitter {
                 return;
             }
 
-            // Step 2: Get the current lobby's code
-            const code = this.readMemory<number>("int32", this.asm.modBaseAddr, this.addresses.gameCode);
-            // If there is no code...
-            if (!code) {
-                // but the player is in game, emit the leave event and destroy the game object
-                if (this.game) {
-                    this.emit("leaveGame", this.game);
-                    delete this.game;
-                }
-            }
-            
-            // If there is a code, but there wasn't one last time, create a new game and emit the joinGame event
-            if (!this.game && code) {
-                this.game = new Game(this, code);
+            // Step 2: Get the game state 
+            const state = this.state;
+            // If the player is in the menu but there is a game object
+            if (state === AMONG_US_STATES.MENU && this.game) {
+                this.emit("leaveGame", this.game);
+                delete this.game;
+            } else if (state === AMONG_US_STATES.LOBBY && !this.game) {
+                this.game = new Game(this);
                 // Without the timeout, if you get game settings inside the event, they will be from the previous game. 
                 setTimeout(() => this.emit("joinGame", this.game), 250);
             }
@@ -54,7 +48,7 @@ export class AmongUsProcess extends EventEmitter {
         const meetingHud = this.readMemory<number>("pointer", this.asm.modBaseAddr, this.addresses.meetingHud);
         const meetingHud_cachePtr = meetingHud === 0 ? 0 : this.readMemory<number>("uint32", meetingHud, this.addresses.meetingHudCachePtr);
         const meetingHudState = meetingHud_cachePtr === 0 ? 4 : this.readMemory("int", meetingHud, this.addresses.meetingHudState, 4);
-        const state = this.readMemory("int", this.asm.modBaseAddr, this.addresses.gameState);
+        const state = this.readMemory("int", this.asm.modBaseAddr, this.addresses.game.state);
         switch(state) {
         case 0: return AMONG_US_STATES.MENU;
         case 1: 
@@ -84,7 +78,7 @@ export class AmongUsProcess extends EventEmitter {
                 cb(new AmongUsProcess(MemoryJS.openProcess("Among Us.exe"), MemoryJS.findModule("GameAssembly.dll", process.th32ProcessID)));
                 foundProcesses.push(process.th32ProcessID);
                 if (cancelOnFirstFind) clearInterval(inv);
-            }, 500);
+            }, 750);
         }, interval);
     }
 
