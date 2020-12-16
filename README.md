@@ -2,7 +2,7 @@
 
 Get and modify data from a local among us game. This library was **NOT** made so you can cheat in public lobbies. That's for losers. 
 
-**This library is NOWHERRE near stable. There some known bugs and also a ton of missing features.**
+**This library is NOWHERRE near stable. There some known bugs and also a ton of missing features. We're looking for contributors!**
 
 ## Install
 
@@ -21,7 +21,9 @@ For now you can:
 - Transpile the source code to javascript, if you don't use typescript (`tsc`)
 - Import the AmongUsProcess where you need it!
 
-## Example
+## Examples
+
+### Listen to in-game events
 
 ```js
 const AmongUsProcess = require("among-us-client");
@@ -54,6 +56,18 @@ AmongUsProcess.scan((proc) => {
 
 });
 
+```
+
+### Get all alive impostors
+
+```js
+proc.on("startGame", game => {
+    const impostors = [];
+    for (const [, player] of game.players) {
+        player.patch(); // player#patch() updates the player's data. Player data doesn't automatically get updated!
+        if (player.isImpostor && !player.isDead && !player.disconnected) impostors.push(player);
+    }
+});
 ```
 
 ## Documentation

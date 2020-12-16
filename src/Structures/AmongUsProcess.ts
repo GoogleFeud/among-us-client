@@ -167,6 +167,7 @@ export class AmongUsProcess extends EventEmitter {
 export declare interface AmongUsProcess {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     on(event: PROCESS_EVENT, cb: (...args: Array<any>) => void) : this;
+    on(event: "joinGame", cb: (game: Game) => void) : this;
     on(event: "startGame", cb: (game: Game) => void) : this;
     on(event: "leaveGame", cb: (game: Game) => void) : this;
     on(event: "endGame", cb: (game: Game) => void) : this;

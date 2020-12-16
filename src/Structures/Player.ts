@@ -1,7 +1,6 @@
 import { Game } from "./Game";
 import Structon from "structron";
 import * as MemoryJS from "memoryjs";
-import { runInThisContext } from "vm";
 
 export const PlayerStructure = new Structon()
     .addMember(Structon.TYPES.SKIP(8), "...")
