@@ -16,4 +16,4 @@ AmongUsProcess.scan((p) => {
         const rtrnFnc = require(`./src/${testFile}`);
         rtrnFnc(p);
     }
-}, 1000, true);
+});

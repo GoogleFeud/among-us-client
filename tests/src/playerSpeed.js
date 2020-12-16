@@ -9,6 +9,6 @@ module.exports = (p)  => {
         const newSpeed = 15;
         game.setPlayerSpeed(newSpeed);
         console.log("Set player speed to 15");
-        console.log("\n\n");
+        console.log("\n");
     });
 };

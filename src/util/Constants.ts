@@ -13,3 +13,20 @@ export enum MEETING_STATES {
     VOTING = 1,
     RESULTS = 3
 }
+
+export enum PLAYER_COLORS {
+    Red,
+    Blue,
+    DarkGreen,
+    Pink,
+    Orange,
+    Yellow,
+    Black,
+    White,
+    Purple,
+    Brown,
+    Cyan,
+    Lime
+}
+
+export type PROCESS_EVENT = "close" | "endGame" | "leaveGame" | "joinGame" | "startGame" | "meetingDiscussion" | "meetingVoting" | "meetingResults"

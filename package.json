@@ -30,6 +30,7 @@
     "typescript": "^4.1.3"
   },
   "dependencies": {
-    "memoryjs": "^3.4.0"
+    "memoryjs": "^3.4.0",
+    "structron": "^0.2.6"
   }
 }

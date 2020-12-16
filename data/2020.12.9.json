@@ -3,7 +3,6 @@
     "meetingHud": [29717412, 92, 0],
     "meetingHudCachePtr": [8],
     "meetingHudState": [132],
-    "gameCode": [28254460, 92, 0, 32, 40],
     "game": {
         "gameCode": [28254460, 92, 0, 32, 40],
         "state": [29720404, 92, 0, 100],
@@ -16,12 +15,21 @@
         "speed": [29709768, 92, 20, 20],
         "emergencyMeetings": [29663276, 92, 52, 48],
         "impostors": [29720636, 92, 52, 56],
-        "commonTasks": [29709768, 92, 20, 36]
+        "commonTasks": [29709768, 92, 20, 36],
+        "longTasks": [29720636, 92, 52, 40]
     },
     "player": {
         "allPlayersPtr": [29719528, 92, 0, 36],
+        "count": [12], 
         "allPlayers": [8],
-        "playerCount": [12],
-        "playerAddrPtr": 16
+        "addrPtr": 16,
+        "bufferLength": 56,
+        "offsets": [0, 0],
+        "isLocal": [84],
+        "localX": [96, 80],
+        "localY": [96, 84],
+        "remoteX": [96, 60],
+        "remoteY": [96, 64],
+        "inVent": [49]
     }
 }

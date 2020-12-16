@@ -1,6 +1,6 @@
 
 import * as MemoryJS from "memoryjs";
-import {AMONG_US_STATES, MEETING_STATES} from "../util/Constants";
+import {AMONG_US_STATES, MEETING_STATES, PROCESS_EVENT} from "../util/Constants";
 import {AddressData} from "../util/AmongUsAddressData";
 import * as path from "path";
 import * as fs from "fs";
@@ -9,17 +9,31 @@ import {EventEmitter} from "events";
 
 export type ScanCallback = (pc: AmongUsProcess) => void
 
+export interface AmongUsProcessSettings {
+    playerEvents?: boolean
+    playerEventInterval?: number
+    gameEventInterval: number
+    gameVersion: string
+}
+
+const defaultSettings: AmongUsProcessSettings = {
+    gameEventInterval: 750,
+    gameVersion: "2020.12.9"
+};
+
 export class AmongUsProcess extends EventEmitter {
     process: MemoryJS.ProcessObject
     asm: MemoryJS.ModuleObject
     addresses: AddressData
+    settings: AmongUsProcessSettings
     game?: Game
 
-    constructor(process: MemoryJS.ProcessObject, asm: MemoryJS.ModuleObject) {
+    constructor(settings: Partial<AmongUsProcessSettings>, process: MemoryJS.ProcessObject, asm: MemoryJS.ModuleObject) {
         super();
+        this.settings = Object.assign(defaultSettings, settings);
         this.process = process;
         this.asm = asm;
-        this.addresses = require(`../../data/${AmongUsProcess.version}.json`);
+        this.addresses = require(`../../data/${this.settings.gameVersion}.json`);
 
         let lastMeetingState = -1;
         const interval = setInterval(() => {
@@ -72,7 +86,7 @@ export class AmongUsProcess extends EventEmitter {
                 }
                 lastMeetingState = meetingHudState;
             }
-        }, 750);
+        }, this.settings.gameEventInterval);
     }
 
     getState() : {meetingHudState: MEETING_STATES, state: AMONG_US_STATES} {
@@ -91,22 +105,22 @@ export class AmongUsProcess extends EventEmitter {
         }
     }
 
-    static all() : Array<AmongUsProcess> {
+    static all(settings: Partial<AmongUsProcessSettings> = {}) : Array<AmongUsProcess> {
         const processes = [];
         for (const process of MemoryJS.getProcesses()) {
-            if (process.szExeFile === "Among Us.exe") processes.push(new AmongUsProcess(MemoryJS.openProcess("Among Us.exe"), MemoryJS.findModule("GameAssembly.dll", process.th32ProcessID)));
+            if (process.szExeFile === "Among Us.exe") processes.push(new AmongUsProcess(settings, MemoryJS.openProcess("Among Us.exe"), MemoryJS.findModule("GameAssembly.dll", process.th32ProcessID)));
         }
         return processes;
     }
 
-    static scan(cb: ScanCallback, interval = 250, cancelOnFirstFind = true) : void {
+    static scan(cb: ScanCallback, settings: Partial<AmongUsProcessSettings> = {}, interval = 1000, cancelOnFirstFind = true) : void {
         const foundProcesses: Array<number> = [];
         const inv = setInterval(() => {
             const process = MemoryJS.getProcesses().find(p => p.szExeFile === "Among Us.exe");
             if (!process || foundProcesses.includes(process.th32ProcessID)) return;
             // Sometimes, memoryJS won't find the game assembly at game start.
             setTimeout(() => {
-                cb(new AmongUsProcess(MemoryJS.openProcess("Among Us.exe"), MemoryJS.findModule("GameAssembly.dll", process.th32ProcessID)));
+                cb(new AmongUsProcess(settings, MemoryJS.openProcess("Among Us.exe"), MemoryJS.findModule("GameAssembly.dll", process.th32ProcessID)));
                 foundProcesses.push(process.th32ProcessID);
                 if (cancelOnFirstFind) clearInterval(inv);
             }, 750);
@@ -122,8 +136,6 @@ export class AmongUsProcess extends EventEmitter {
             return null;
         } 
     }
-
-    static version = "2020.12.9";
 
     /*Methods for reading memory. Don't use if you don't know what you're doing!*/
 
@@ -149,4 +161,18 @@ export class AmongUsProcess extends EventEmitter {
         return buffer.toString("utf8").replace(/\0/g, "");
     }
 
+
+}
+
+export declare interface AmongUsProcess {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    on(event: PROCESS_EVENT, cb: (...args: Array<any>) => void) : this;
+    on(event: "startGame", cb: (game: Game) => void) : this;
+    on(event: "leaveGame", cb: (game: Game) => void) : this;
+    on(event: "endGame", cb: (game: Game) => void) : this;
+    on(event: "meetingDiscussion", cb: (game: Game) => void) : this;
+    on(event: "meetingVoting", cb: (game: Game) => void) : this;
+    on(event: "meetingResults", cb: (game: Game) => void) : this;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    emit(event: PROCESS_EVENT, ...data: Array<any>) : boolean;
 }

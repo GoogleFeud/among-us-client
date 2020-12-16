@@ -3,8 +3,9 @@
 export interface AddressDataSettings {
     speed: Array<number>,
     emergencyMeetings: Array<number>,
-    impostors: Array<number>
-    commonTasks: Array<number>
+    impostors: Array<number>,
+    commonTasks: Array<number>,
+    longTasks: Array<number>
 }
 
 export interface GameDataSettings {
@@ -16,7 +17,17 @@ export interface GameDataSettings {
 
 export interface PlayerDataSettings {
     allPlayersPtr: Array<number>,
-    allPlayers: Array<number>
+    allPlayers: Array<number>,
+    addrPtr: number,
+    bufferLength: number,
+    offsets: Array<number>,
+    count: Array<number>,
+    isLocal: Array<number>,
+    localX: Array<number>,
+    localY: Array<number>,
+    remoteX: Array<number>,
+    remoteY: Array<number>,
+    inVent: Array<number>
 }
 
 export interface AddressData {
