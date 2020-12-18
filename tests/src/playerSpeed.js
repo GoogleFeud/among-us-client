@@ -3,6 +3,7 @@
 
 
 module.exports = (p)  => {
+    console.log("Test case playerSpeed loaded!");
     p.on("joinGame", (game) => {
         console.log("Test Case: Player Speed Setting");
         console.log("Get player speed: ", game.getPlayerSpeed());

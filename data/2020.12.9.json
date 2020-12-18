@@ -4,12 +4,12 @@
     "meetingHudCachePtr": [8],
     "meetingHudState": [132],
     "game": {
-        "gameCode": [28254460, 92, 0, 32, 40],
         "state": [29720404, 92, 0, 100],
+        "getHost": 6206080,
         "code": [28254460, 92, 0, 32, 40],
         "tasksTotal": [29719528, 92, 0, 40],
         "tasksCompleted": [29719528, 92, 0, 44],
-        "discussionTime": [29717412, 92, 0, 160]
+        "exiledPlayerId": [255, 29717412, 92, 0, 148, 8]
     },
     "settings": {
         "speed": [29709768, 92, 20, 20],
@@ -30,6 +30,7 @@
         "localY": [96, 84],
         "remoteX": [96, 60],
         "remoteY": [96, 64],
-        "inVent": [49]
+        "inVent": [49],
+        "ownerId": [28]
     }
 }

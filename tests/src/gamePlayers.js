@@ -3,21 +3,32 @@
 
 
 module.exports = (p)  => {
+    console.log("Test case gamePlayers loaded!");
     let interval;
-    p.on("startGame", (game) => {
-        console.log("Game started!");
+
+
+    p.on("joinGame", (game) => {
         interval = setInterval(() => {
             const players = [];
             for (const [, player] of game.players) {
-                player.patch();
-                players.push(`ID: ${player.id} | Name: ${player.name} | Is Impostor: ${player.isImpostor} | Is Dead: ${player.isDead} | Is Disconnected: ${player.disconnected} | X: ${player.x} | Y: ${player.y}`);
+                players.push(`ID: ${player.id} | Name: ${player.name} | Is Impostor: ${player.isImpostor} | Is Dead: ${player.isDead} | Is Disconnected: ${player.disconnected} | OwnerID: ${player.ownerId} | X: ${Math.round(player.x)}`); 
+                if (player.name === "Blue") me = player;
             }
             console.log(players.join("\n") || "No players?");
-            console.log("----------------------------------------------------------------------------------------------");
-        }, 10000);
+            console.log("----------------------------------------------------------------------------------------------"); 
+        }, 1000); 
     });
 
-    p.on("endGame", () => {
+    p.on("leaveGame", () => {
         clearInterval(interval);
     });
+
+    p.on("playerJoinLobby", (player) => {
+        console.log("Join: ", JSON.stringify({name: player.name, id: player.id}, null, 3));
+    });
+
+    p.on("playerLeaveLobby", (player) => {
+        console.log("Leave: ", JSON.stringify({name: player.name, id: player.id}, null, 3));
+    });
+
 };

@@ -2,7 +2,7 @@
 
 Get and modify data from a local among us game. This library was **NOT** made so you can cheat in public lobbies. That's for losers. 
 
-**This library is NOWHERRE near stable. There some known bugs and also a ton of missing features. We're looking for contributors!**
+**This library is NOWHERE near stable. There some known bugs and also a ton of missing features. We're looking for contributors!**
 
 ## Install
 

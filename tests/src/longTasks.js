@@ -3,6 +3,7 @@
 
 
 module.exports = (p)  => {
+    console.log("Test case longTasks loaded!");
     p.on("joinGame", (game) => {
         console.log("Test Case: Long Tasks Setting");
         console.log("Get long tasks: ", game.getLongTasks());

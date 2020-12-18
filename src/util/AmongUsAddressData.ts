@@ -12,7 +12,9 @@ export interface GameDataSettings {
     state: Array<number>,
     code: Array<number>,
     tasksTotal: Array<number>,
-    tasksCompleted: Array<number>
+    tasksCompleted: Array<number>,
+    exiledPlayerId: Array<number>,
+    getHost: number
 }
 
 export interface PlayerDataSettings {
@@ -27,7 +29,8 @@ export interface PlayerDataSettings {
     localY: Array<number>,
     remoteX: Array<number>,
     remoteY: Array<number>,
-    inVent: Array<number>
+    inVent: Array<number>,
+    ownerId: Array<number>
 }
 
 export interface AddressData {

@@ -16,4 +16,6 @@ AmongUsProcess.scan((p) => {
         const rtrnFnc = require(`./src/${testFile}`);
         rtrnFnc(p);
     }
+}, {
+    playerEvents: true
 });

@@ -6,6 +6,7 @@ import * as path from "path";
 import * as fs from "fs";
 import { Game } from "./Game";
 import {EventEmitter} from "events";
+import { Player, PlayerBaseInfo } from "./Player";
 
 export type ScanCallback = (pc: AmongUsProcess) => void
 
@@ -18,6 +19,7 @@ export interface AmongUsProcessSettings {
 
 const defaultSettings: AmongUsProcessSettings = {
     gameEventInterval: 750,
+    playerEventInterval: 250,
     gameVersion: "2020.12.9"
 };
 
@@ -35,12 +37,14 @@ export class AmongUsProcess extends EventEmitter {
         this.asm = asm;
         this.addresses = require(`../../data/${this.settings.gameVersion}.json`);
 
+        let playerInterval = 0;
         let lastMeetingState = -1;
         const interval = setInterval(() => {
             // Step 1: Check if the among us process that is connected to this instance has been closed
             if (!MemoryJS.getProcesses().some(p => p.th32ProcessID === this.process.th32ProcessID)) {
                 this.emit("close", this);
                 clearInterval(interval);
+                clearInterval(playerInterval);
                 return;
             }
 
@@ -81,12 +85,44 @@ export class AmongUsProcess extends EventEmitter {
                 case MEETING_STATES.VOTING:
                     this.emit("meetingVoting", this.game);
                     break;
-                case MEETING_STATES.RESULTS:
+                case MEETING_STATES.RESULTS: 
                     this.emit("meetingResults", this.game);
                 }
                 lastMeetingState = meetingHudState;
             }
         }, this.settings.gameEventInterval);
+
+
+        // If the player events setting is enabled
+        if (settings.playerEvents) {
+            playerInterval = setInterval(() => {
+                if (!this.game) return;
+                if (!this.game.started) {
+                    const previous = new Map(this.game.players);
+                    // eslint-disable-next-line prefer-const
+                    let {count, firstPlayerAddress} = this.game.players.fetchPlayerArray();
+                    for (let i=0; i < count; i++) {
+                        const playerClass = this.game.players.get(i);
+                        if (!playerClass) {
+                            const player = this.game.players.add(firstPlayerAddress);
+                            if (player) this.emit("playerJoinLobby", player);
+                        } else {
+                            playerClass.fetchData(firstPlayerAddress);
+                            previous.delete(i);
+                        }
+                        firstPlayerAddress += 4;
+                    }
+                    if (previous.size) {
+                        for (const [id, leftPlayer] of previous) {
+                            this.game.players.delete(id);
+                            this.emit("playerLeaveLobby", leftPlayer);
+                        }
+                    }
+                }
+            }, this.settings.playerEventInterval);
+        }
+
+
     }
 
     getState() : {meetingHudState: MEETING_STATES, state: AMONG_US_STATES} {
@@ -151,8 +187,7 @@ export class AmongUsProcess extends EventEmitter {
     }
 
     readMemory<T>(dataType: MemoryJS.DataType, address: number, offsets: number[], defaultParam?: T): T {
-        if (!address || !this.process) return defaultParam as T;
-        return MemoryJS.readMemory<T>(this.process.handle, this.offsetAddress(address, offsets), dataType);
+        return MemoryJS.readMemory<T>(this.process.handle, this.offsetAddress(address, offsets), dataType) || (defaultParam as T);
     }
 
     readString(address: number): string {
@@ -174,6 +209,8 @@ export declare interface AmongUsProcess {
     on(event: "meetingDiscussion", cb: (game: Game) => void) : this;
     on(event: "meetingVoting", cb: (game: Game) => void) : this;
     on(event: "meetingResults", cb: (game: Game) => void) : this;
+    on(event: "playerJoinLobby", cb: (player: Player) => void) : this;
+    on(event: "playerLeaveLobby", cb: (player: PlayerBaseInfo) => void) : this;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     emit(event: PROCESS_EVENT, ...data: Array<any>) : boolean;
 }

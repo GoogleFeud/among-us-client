@@ -29,4 +29,4 @@ export enum PLAYER_COLORS {
     Lime
 }
 
-export type PROCESS_EVENT = "close" | "endGame" | "leaveGame" | "joinGame" | "startGame" | "meetingDiscussion" | "meetingVoting" | "meetingResults"
+export type PROCESS_EVENT = "close" | "endGame" | "leaveGame" | "joinGame" | "startGame" | "meetingDiscussion" | "meetingVoting" | "meetingResults" | "playerJoinLobby" | "playerLeaveLobby"
