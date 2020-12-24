@@ -36,6 +36,22 @@ module.exports = (p)  => {
         console.log("User closed Among us!");
     });
 
+    p.on("tasks", () => {
+        console.log("Time to do tasks!");
+    });
+
+    p.on("discussion", () => {
+        console.log("Time to discuss who the murderer is!");
+    });
+
+    p.on("voting", () => {
+        console.log("Time to vote!");
+    });
+
+    p.on("results", () => {
+        console.log("Who got voted out?");
+    });
+
     p.on("playerDie", (player, killer) => {
         console.log(`Player ${player.name} has died! The killer was ${killer ? killer.name:"unknown"}!`);
     });

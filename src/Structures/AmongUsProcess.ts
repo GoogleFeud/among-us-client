@@ -14,13 +14,15 @@ export interface AmongUsProcessSettings {
     playerEvents?: boolean
     playerEventInterval?: number
     gameEventInterval: number
+    resultsTimeout: number
     gameVersion: string
 }
 
 const defaultSettings: AmongUsProcessSettings = {
     gameEventInterval: 750,
     playerEventInterval: 750,
-    gameVersion: "2020.12.9"
+    gameVersion: "2020.12.9",
+    resultsTimeout: 12000
 };
 
 
@@ -31,6 +33,8 @@ export class AmongUsProcess extends EventEmitter {
     settings: AmongUsProcessSettings
     game?: Game
     cachedState: number
+
+    private meetingHudResults?: boolean
 
     constructor(settings: Partial<AmongUsProcessSettings>, process: MemoryJS.ProcessObject, asm: MemoryJS.ModuleObject) {
         super();
@@ -52,10 +56,8 @@ export class AmongUsProcess extends EventEmitter {
                 return;
             }
             // Step 2: Get the game state 
-            //this.cachedState = this.getState();
 
-            this.cachedState = this.getState();
-            const state = this.cachedState;
+            const state = this.getState();
             console.log(state);
             // If the player is in the menu but there is a game object
             if (state === AMONG_US_STATES.MENU && this.game) {
@@ -82,6 +84,24 @@ export class AmongUsProcess extends EventEmitter {
                 this.game.started = false;
             }
 
+            if (this.game && this.game.started && state !== this.cachedState) {
+                switch (state) {
+                case AMONG_US_STATES.TASKS:
+                    this.emit("tasks", this);
+                    break;
+                case AMONG_US_STATES.DISCUSSION:
+                    this.emit("discussion", this);
+                    break;
+                case AMONG_US_STATES.RESULTS:
+                    this.emit("results", this);
+                    break;
+                case AMONG_US_STATES.VOTING:
+                    this.emit("voting", this);
+                    break;
+                }
+            }
+
+            this.cachedState = state;
         }, this.settings.gameEventInterval);
 
 
@@ -105,20 +125,38 @@ export class AmongUsProcess extends EventEmitter {
 
     }
 
+
+    // -1 -> in lobby, menu, tasks (FOR FIRST GAME )
+    // on discission - -1
+    // on voting - 1
+    // on results - 3
+    // after first results, meetingHud is always 3
+    // discussion - -1
+    // voting - 1
+    // on results - 3
     getState() : number {
         const meetingHud = this.readMemory<number>("pointer", this.asm.modBaseAddr, this.addresses.meetingHud);
         const meetingHud_cachePtr = meetingHud === 0 ? 0 : this.readMemory<number>("uint32", meetingHud, this.addresses.meetingHudCachePtr);
-        const meetingHudState = meetingHud_cachePtr === 0 ? 1 : this.readMemory("int", meetingHud, this.addresses.meetingHudState, 1) as number;
+        const meetingHudState = meetingHud_cachePtr === 0 ? 4 : this.readMemory("int", meetingHud, this.addresses.meetingHudState, 4) as number;
         const state = this.readMemory("int", this.asm.modBaseAddr, this.addresses.game.state);
-        console.log("HUD STATE: ", meetingHudState);
+        let resultTimeout;
+        console.log("RAW MEETING STATE: ", meetingHudState);
         switch(state) {
         case 0: 
+        case undefined:
             return AMONG_US_STATES.MENU;
         case 1: 
         case 3:
             return AMONG_US_STATES.LOBBY;
         default:
-            if (meetingHudState === 1 || !meetingHudState) return AMONG_US_STATES.DISCUSSION;
+            if (meetingHudState === 1 || meetingHudState === 2) return AMONG_US_STATES.VOTING;
+            else if (this.game && this.game.started && meetingHudState > 3) {
+                this.meetingHudResults = true;
+                return AMONG_US_STATES.DISCUSSION;
+            } else if (this.meetingHudResults && meetingHudState === 3) {
+                if (!resultTimeout) resultTimeout = setTimeout(() => this.meetingHudResults = false, this.settings.resultsTimeout);
+                return AMONG_US_STATES.RESULTS;
+            }
             else return AMONG_US_STATES.TASKS;
         }
     }
@@ -200,6 +238,10 @@ export declare interface AmongUsProcess {
     on(event: "playerDie", cb: (player: Player, killer?: Player) => void) : this;
     on(event: "playerEject", cb: (player: Player) => void) : this;
     on(event: "playerDisconnect", cb: (player: Player) => void) : this;
+    on(event: "discussion", cb: (player: Player) => void) : this;
+    on(event: "voting", cb: (player: Player) => void) : this;
+    on(event: "results", cb: (player: Player) => void) : this;
+    on(event: "tasks", cb: (player: Player) => void) : this;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     emit(event: PROCESS_EVENT, ...data: Array<any>) : boolean;
 }

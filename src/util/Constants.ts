@@ -4,6 +4,8 @@ export enum AMONG_US_STATES {
     TASKS,
     DISCUSSION,
     MENU,
+    VOTING,
+    RESULTS,
     UNKNOWN
 }
 
@@ -22,4 +24,4 @@ export enum PLAYER_COLORS {
     Lime
 }
 
-export type PROCESS_EVENT = "close" | "endGame" | "leaveGame" | "joinGame" | "startGame"  | "playerDie" | "playerDisconnect" | "playerEject"
+export type PROCESS_EVENT = "close" | "endGame" | "leaveGame" | "joinGame" | "startGame"  | "playerDie" | "playerDisconnect" | "playerEject" | "tasks" | "discussion" | "results" | "voting"

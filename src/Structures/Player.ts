@@ -62,7 +62,7 @@ export class Player {
         if (!this.game.started || !this.game.process.settings.playerEvents || val === this._isDead) this._isDead = val;
         else {
             if (val === 1) {
-                if (this.game.process.cachedState === AMONG_US_STATES.DISCUSSION) this.game.process.emit("playerEject", this);
+                if (this.game.process.cachedState === AMONG_US_STATES.RESULTS) this.game.process.emit("playerEject", this);
                 else this.game.process.emit("playerDie", this, findClosestPlayer(this, this.game.players.filter(p => p.id !== this.id && p.isImpostor === 1 && !p.isDead && !p.disconnected))); 
             }
             this._isDead = val;

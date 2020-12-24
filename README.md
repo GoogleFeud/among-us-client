@@ -2,7 +2,7 @@
 
 Get and modify data from a local among us game. This library was **NOT** made so you can cheat in public lobbies. That's for losers. 
 
-**This library is NOWHERE near stable. There some known bugs and also a ton of missing features. We're looking for contributors!**
+**This library is NOWHERE near stable. There are a lot of known bugs and also a ton of missing features. Expect every new commit to contain a breaking change. We're looking for contributors!**
 
 ## Install
 
@@ -51,7 +51,7 @@ AmongUsProcess.scan((proc) => {
     });
 
     proc.on("close", () => {
-        console.log(`User closed Among Us!`);
+        console.log("User closed Among Us!");
     });
 
 });
