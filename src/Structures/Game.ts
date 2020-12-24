@@ -1,6 +1,5 @@
 import { AmongUsProcess } from "./AmongUsProcess";
 import * as MemoryJS from "memoryjs";
-import { MEETING_STATES} from "../util/Constants";
 import {PlayerCollector} from "../Collectors/PlayerCollector";
 
 
@@ -8,14 +7,12 @@ export class Game {
     process: AmongUsProcess
     code: string
     started: boolean
-    meetingState: MEETING_STATES
     players: PlayerCollector
     hostId?: number
     constructor(process: AmongUsProcess) {
         this.process = process;
         this.code = this.process.readString(this.process.readMemory<number>("int32", this.process.asm.modBaseAddr, this.process.addresses.game.code)).split("\r\n")[1];
         this.started = false;
-        this.meetingState = -1;
         this.players = new PlayerCollector(this);
     }
 

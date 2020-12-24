@@ -1,7 +1,7 @@
-
 import { Game } from "../Structures/Game";
 import { Player } from "../Structures/Player";
 
+export type PlayerCollectorFilter = (player: Player) => boolean
 
 export class PlayerCollector extends Map<number, Player> {
     game: Game
@@ -26,11 +26,10 @@ export class PlayerCollector extends Map<number, Player> {
         let {count, firstPlayerAddress} = this.fetchPlayerArray();
 
         for (let i=0; i < count; i++) {
-
             const player = new Player(this.game, firstPlayerAddress);
             if (player.id === undefined || (player.id > 10 || player.id < 0)) return;
             firstPlayerAddress += 4;
-            this.set(player.id ?? 0, player);
+            this.set(i, player);
         }
     }
 
@@ -43,5 +42,15 @@ export class PlayerCollector extends Map<number, Player> {
             firstPlayerAddress: allPlayersArray + process.addresses.player.addrPtr
         };
     } 
+
+    //--- Some nice utility methods
+
+    filter(cb: PlayerCollectorFilter) : Array<Player> {
+        const res = [];
+        for (const [, player] of this) {
+            if (cb(player)) res.push(player);
+        }
+        return res;
+    }
 
 }

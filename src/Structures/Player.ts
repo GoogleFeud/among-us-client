@@ -2,6 +2,8 @@ import { Game } from "./Game";
 import Structon from "structron";
 import * as MemoryJS from "memoryjs";
 import { AmongUsProcess } from "./AmongUsProcess";
+import { findClosestPlayer } from "../util/utils";
+import { AMONG_US_STATES } from "../util/Constants";
 
 export const PlayerStructure = new Structon()
     .addMember(Structon.TYPES.SKIP(8), "...")
@@ -19,15 +21,14 @@ export const PlayerStructure = new Structon()
     .addMember(Structon.TYPES.UINT, "objectPointer");
 
 export interface PlayerBaseInfo {
-    name?: string
-    id?: number
-    color?: number
-    hat?: number
-    pet?: number
-    skin?: number
-    x?: number
-    y?: number
-    ownerId?: number
+        name?: string
+        id?: number
+        color?: number
+        hat?: number
+        pet?: number
+        skin?: number
+        x?: number
+        y?: number
 }
 
 export class Player {
@@ -38,18 +39,46 @@ export class Player {
     hat?: number
     pet?: number
     skin?: number
-    disconnected?: number
     taskPointer?: number
     isImpostor?: number
-    isDead?: number
-    x?: number
-    y?: number
+    private _isDead?: number
+    private _disconnected?: number
+    x: number
+    y: number
     inVent?: number
-    ownerId?: number
     private playerControl?: number;
     constructor(game: Game, playerPointer: number|Buffer) {
         this.game = game;
         this.fetchData(playerPointer);
+        this.x = 0;
+        this.y = 0;
+    }
+
+    get isDead() : number|undefined {
+        return this._isDead;
+    }
+
+    set isDead(val: number|undefined) {
+        if (!this.game.started || !this.game.process.settings.playerEvents || val === this._isDead) this._isDead = val;
+        else {
+            if (val === 1) {
+                if (this.game.process.cachedState === AMONG_US_STATES.DISCUSSION) this.game.process.emit("playerEject", this);
+                else this.game.process.emit("playerDie", this, findClosestPlayer(this, this.game.players.filter(p => p.id !== this.id && p.isImpostor === 1 && !p.isDead && !p.disconnected))); 
+            }
+            this._isDead = val;
+        }
+    }
+
+    get disconnected() : number|undefined {
+        return this._disconnected;
+    }
+
+    set disconnected(val: number|undefined) {
+        if (!this.game.started || !this.game.process.settings.playerEvents || val === this._disconnected) this._disconnected = val;
+        else {
+            if (val === 1) this.game.process.emit("playerDisconnect", this);
+            this._disconnected = val;
+        }
     }
 
     fetchData(playerPointer: number|Buffer) : this {
@@ -62,13 +91,12 @@ export class Player {
             process.addresses.player.bufferLength
         );
         const {data} = PlayerStructure.report(buffer, 0, {monitorUsage: false});
-        const name = process.readString(data.name);
+        this.name = process.readString(data.name);
+        delete data.name;
         Object.assign(this, data);
         this.playerControl = data.objectPointer;
-        this.name = name;
         
         this.inVent = process.readMemory<number>("byte", data.objectPointer, process.addresses.player.inVent);
-        this.ownerId = process.readMemory<number>("uint32", data.objectPointer, process.addresses.player.ownerId);
 
         const areCoordsLocal = process.readMemory<number>("int", data.objectPointer, process.addresses.player.isLocal, 0);
 
@@ -85,19 +113,6 @@ export class Player {
         this.fetchData(allPlayersArray + process.addresses.player.addrPtr + ((this.id || 0) * 4));
     }
 
-    cloneObject() : PlayerBaseInfo {
-        return {
-            name: this.name,
-            id: this.id,
-            color: this.color,
-            hat: this.hat,
-            pet: this.pet,
-            skin: this.skin,
-            x: this.x,
-            y: this.y,
-            ownerId: this.ownerId
-        };
-    }
 
     static getPlayerBuffer(process: AmongUsProcess, ptr: number) : Buffer|null {
         const buffer = MemoryJS.readBuffer(

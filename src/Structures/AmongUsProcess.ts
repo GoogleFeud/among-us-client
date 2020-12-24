@@ -1,12 +1,12 @@
 
 import * as MemoryJS from "memoryjs";
-import {AMONG_US_STATES, MEETING_STATES, PROCESS_EVENT} from "../util/Constants";
+import {AMONG_US_STATES, PROCESS_EVENT} from "../util/Constants";
 import {AddressData} from "../util/AmongUsAddressData";
 import * as path from "path";
 import * as fs from "fs";
 import { Game } from "./Game";
 import {EventEmitter} from "events";
-import { Player, PlayerBaseInfo } from "./Player";
+import { Player } from "./Player";
 
 export type ScanCallback = (pc: AmongUsProcess) => void
 
@@ -19,9 +19,10 @@ export interface AmongUsProcessSettings {
 
 const defaultSettings: AmongUsProcessSettings = {
     gameEventInterval: 750,
-    playerEventInterval: 250,
+    playerEventInterval: 750,
     gameVersion: "2020.12.9"
 };
+
 
 export class AmongUsProcess extends EventEmitter {
     process: MemoryJS.ProcessObject
@@ -29,6 +30,7 @@ export class AmongUsProcess extends EventEmitter {
     addresses: AddressData
     settings: AmongUsProcessSettings
     game?: Game
+    cachedState: number
 
     constructor(settings: Partial<AmongUsProcessSettings>, process: MemoryJS.ProcessObject, asm: MemoryJS.ModuleObject) {
         super();
@@ -37,8 +39,10 @@ export class AmongUsProcess extends EventEmitter {
         this.asm = asm;
         this.addresses = require(`../../data/${this.settings.gameVersion}.json`);
 
-        let playerInterval = 0;
-        let lastMeetingState = -1;
+        let playerInterval = -1;
+
+        this.cachedState = 0;
+    
         const interval = setInterval(() => {
             // Step 1: Check if the among us process that is connected to this instance has been closed
             if (!MemoryJS.getProcesses().some(p => p.th32ProcessID === this.process.th32ProcessID)) {
@@ -47,9 +51,12 @@ export class AmongUsProcess extends EventEmitter {
                 clearInterval(playerInterval);
                 return;
             }
-
             // Step 2: Get the game state 
-            const {state, meetingHudState} = this.getState();
+            //this.cachedState = this.getState();
+
+            this.cachedState = this.getState();
+            const state = this.cachedState;
+            console.log(state);
             // If the player is in the menu but there is a game object
             if (state === AMONG_US_STATES.MENU && this.game) {
                 // If the game has started, also emit the endGame event.
@@ -57,10 +64,10 @@ export class AmongUsProcess extends EventEmitter {
                 this.emit("leaveGame", this.game);
                 delete this.game;
             } 
+
             else if (state === AMONG_US_STATES.LOBBY && !this.game) {
                 this.game = new Game(this);
-                // Without the timeout, if you get game settings inside the event, they will be from the previous game. 
-                setTimeout(() => this.emit("joinGame", this.game), 500);
+                this.emit("joinGame", this.game);
             }
 
             // Step 3: If the current game state is TASKS, and game.started = false, make game.started = true
@@ -75,21 +82,6 @@ export class AmongUsProcess extends EventEmitter {
                 this.game.started = false;
             }
 
-            // Step 5: If the current meeting state is not the same as the last one
-            if (this.game && meetingHudState !== lastMeetingState) {
-                this.game.meetingState = meetingHudState;
-                switch (meetingHudState) {
-                case MEETING_STATES.DISCUSSION:
-                    this.emit("meetingDiscussion", this.game);
-                    break;
-                case MEETING_STATES.VOTING:
-                    this.emit("meetingVoting", this.game);
-                    break;
-                case MEETING_STATES.RESULTS: 
-                    this.emit("meetingResults", this.game);
-                }
-                lastMeetingState = meetingHudState;
-            }
         }, this.settings.gameEventInterval);
 
 
@@ -97,49 +89,40 @@ export class AmongUsProcess extends EventEmitter {
         if (settings.playerEvents) {
             playerInterval = setInterval(() => {
                 if (!this.game) return;
-                if (!this.game.started) {
-                    const previous = new Map(this.game.players);
+                if (this.game.started) {
+                    // Fetch the data for each player again
                     // eslint-disable-next-line prefer-const
                     let {count, firstPlayerAddress} = this.game.players.fetchPlayerArray();
                     for (let i=0; i < count; i++) {
-                        const playerClass = this.game.players.get(i);
-                        if (!playerClass) {
-                            const player = this.game.players.add(firstPlayerAddress);
-                            if (player) this.emit("playerJoinLobby", player);
-                        } else {
-                            playerClass.fetchData(firstPlayerAddress);
-                            previous.delete(i);
-                        }
+                        const player = this.game.players.get(i);
+                        if (!player) this.game.players.add(firstPlayerAddress);
+                        else player.fetchData(firstPlayerAddress);
                         firstPlayerAddress += 4;
                     }
-                    if (previous.size) {
-                        for (const [id, leftPlayer] of previous) {
-                            this.game.players.delete(id);
-                            this.emit("playerLeaveLobby", leftPlayer);
-                        }
-                    }
-                }
-            }, this.settings.playerEventInterval);
+                } 
+            }, this.settings.playerEventInterval); 
         }
-
 
     }
 
-    getState() : {meetingHudState: MEETING_STATES, state: AMONG_US_STATES} {
+    getState() : number {
         const meetingHud = this.readMemory<number>("pointer", this.asm.modBaseAddr, this.addresses.meetingHud);
         const meetingHud_cachePtr = meetingHud === 0 ? 0 : this.readMemory<number>("uint32", meetingHud, this.addresses.meetingHudCachePtr);
-        const meetingHudState = meetingHud_cachePtr === 0 ? -1 : this.readMemory("int", meetingHud, this.addresses.meetingHudState, 4);
+        const meetingHudState = meetingHud_cachePtr === 0 ? 1 : this.readMemory("int", meetingHud, this.addresses.meetingHudState, 1) as number;
         const state = this.readMemory("int", this.asm.modBaseAddr, this.addresses.game.state);
+        console.log("HUD STATE: ", meetingHudState);
         switch(state) {
-        case 0: return {meetingHudState: meetingHudState, state: AMONG_US_STATES.MENU};
+        case 0: 
+            return AMONG_US_STATES.MENU;
         case 1: 
         case 3:
-            return {state: AMONG_US_STATES.LOBBY, meetingHudState: meetingHudState};
+            return AMONG_US_STATES.LOBBY;
         default:
-            if (meetingHudState > -1) return {state: AMONG_US_STATES.DISCUSSION, meetingHudState: meetingHudState};
-            else return {state: AMONG_US_STATES.TASKS, meetingHudState: meetingHudState};
+            if (meetingHudState === 1 || !meetingHudState) return AMONG_US_STATES.DISCUSSION;
+            else return AMONG_US_STATES.TASKS;
         }
     }
+
 
     static all(settings: Partial<AmongUsProcessSettings> = {}) : Array<AmongUsProcess> {
         const processes = [];
@@ -154,9 +137,17 @@ export class AmongUsProcess extends EventEmitter {
         const inv = setInterval(() => {
             const process = MemoryJS.getProcesses().find(p => p.szExeFile === "Among Us.exe");
             if (!process || foundProcesses.includes(process.th32ProcessID)) return;
-            // Sometimes, memoryJS won't find the game assembly at game start.
             setTimeout(() => {
-                cb(new AmongUsProcess(settings, MemoryJS.openProcess("Among Us.exe"), MemoryJS.findModule("GameAssembly.dll", process.th32ProcessID)));
+                const openedProcess = MemoryJS.openProcess("Among Us.exe");
+                let gameAssembly;
+                do {
+                    try {
+                        gameAssembly = MemoryJS.findModule("GameAssembly.dll", process.th32ProcessID);
+                    } catch(err) {
+                        gameAssembly = undefined;
+                    }
+                }while(!gameAssembly);
+                cb(new AmongUsProcess(settings, openedProcess, gameAssembly));
                 foundProcesses.push(process.th32ProcessID);
                 if (cancelOnFirstFind) clearInterval(inv);
             }, 750);
@@ -206,11 +197,9 @@ export declare interface AmongUsProcess {
     on(event: "startGame", cb: (game: Game) => void) : this;
     on(event: "leaveGame", cb: (game: Game) => void) : this;
     on(event: "endGame", cb: (game: Game) => void) : this;
-    on(event: "meetingDiscussion", cb: (game: Game) => void) : this;
-    on(event: "meetingVoting", cb: (game: Game) => void) : this;
-    on(event: "meetingResults", cb: (game: Game) => void) : this;
-    on(event: "playerJoinLobby", cb: (player: Player) => void) : this;
-    on(event: "playerLeaveLobby", cb: (player: PlayerBaseInfo) => void) : this;
+    on(event: "playerDie", cb: (player: Player, killer?: Player) => void) : this;
+    on(event: "playerEject", cb: (player: Player) => void) : this;
+    on(event: "playerDisconnect", cb: (player: Player) => void) : this;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     emit(event: PROCESS_EVENT, ...data: Array<any>) : boolean;
 }

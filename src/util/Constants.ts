@@ -7,13 +7,6 @@ export enum AMONG_US_STATES {
     UNKNOWN
 }
 
-export enum MEETING_STATES {
-    NO_MEETING = -1,
-    DISCUSSION = 0,
-    VOTING = 1,
-    RESULTS = 3
-}
-
 export enum PLAYER_COLORS {
     Red,
     Blue,
@@ -29,4 +22,4 @@ export enum PLAYER_COLORS {
     Lime
 }
 
-export type PROCESS_EVENT = "close" | "endGame" | "leaveGame" | "joinGame" | "startGame" | "meetingDiscussion" | "meetingVoting" | "meetingResults" | "playerJoinLobby" | "playerLeaveLobby"
+export type PROCESS_EVENT = "close" | "endGame" | "leaveGame" | "joinGame" | "startGame"  | "playerDie" | "playerDisconnect" | "playerEject"

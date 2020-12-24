@@ -8,27 +8,45 @@ module.exports = (p)  => {
 
 
     p.on("joinGame", (game) => {
-        interval = setInterval(() => {
+        console.log("Joined game: ", game.code);
+        /**   interval = setInterval(() => {
             const players = [];
             for (const [, player] of game.players) {
-                players.push(`ID: ${player.id} | Name: ${player.name} | Is Impostor: ${player.isImpostor} | Is Dead: ${player.isDead} | Is Disconnected: ${player.disconnected} | OwnerID: ${player.ownerId} | X: ${Math.round(player.x)}`); 
-                if (player.name === "Blue") me = player;
+                players.push(`ID: ${player.id} | Name: ${player.name} | Is Dead: ${player.isDead} | Disconnected: ${player.disconnected} | X: ${Math.round(player.x)}`); 
             }
             console.log(players.join("\n") || "No players?");
             console.log("----------------------------------------------------------------------------------------------"); 
-        }, 1000); 
+        }, 10000);  */
+    }); 
+
+    p.on("startGame", () => {
+        console.log("Game started!");
     });
 
     p.on("leaveGame", () => {
+        console.log("Left game!");
         clearInterval(interval);
     });
 
-    p.on("playerJoinLobby", (player) => {
-        console.log("Join: ", JSON.stringify({name: player.name, id: player.id}, null, 3));
+    p.on("endGame", () => {
+        console.log("Game ended!");
     });
 
-    p.on("playerLeaveLobby", (player) => {
-        console.log("Leave: ", JSON.stringify({name: player.name, id: player.id}, null, 3));
+    p.on("close", () => {
+        console.log("User closed Among us!");
+    });
+
+    p.on("playerDie", (player, killer) => {
+        console.log(`Player ${player.name} has died! The killer was ${killer ? killer.name:"unknown"}!`);
+    });
+
+    p.on("playerDisconnect", (player) => {
+        if (!player.isDead) console.log(`Player ${player.name} disconnected!`);
+        else console.log(`Player ${player.name} disconnected while they are dead!`);
+    });
+
+    p.on("playerEject", (player) => {
+        console.log(`${player.name} has been ejected!`);
     });
 
 };

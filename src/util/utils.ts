@@ -1,10 +1,16 @@
+
 import { Player } from "../Structures/Player";
 
+export function findClosestPlayer(player: Player, players: Array<Player>) : Player|undefined {
+    let closest;
+    let smallestDifference = Infinity;
 
-export function findMissingPlayers(map1: Map<number, Player>, map2: Map<number, Player>) : Array<Player> {
-    const res = [];
-    for (const [key, player] of map1) {
-        if (!map2.has(key)) res.push(player);
+    for (const otherPlayer of players) {
+        const x = Math.pow((player.x - otherPlayer.x) + (player.y - otherPlayer.y), 2);
+        if (x < smallestDifference) {
+            closest = otherPlayer;
+            smallestDifference = x;
+        } 
     }
-    return res;
+    return closest;
 }
