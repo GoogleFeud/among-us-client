@@ -54,6 +54,9 @@ AmongUsProcess.scan((proc) => {
         console.log("User closed Among Us!");
     });
 
+    proc.on("tasks", (game) => {
+        console.log(`There are ${game.getTotalTasks() - game.getCompletedTasks()} tasks left!`);
+    });
 });
 
 ```
@@ -62,13 +65,11 @@ AmongUsProcess.scan((proc) => {
 
 ```js
 proc.on("startGame", game => {
-    const impostors = [];
-    for (const [, player] of game.players) {
-        player.patch(); // player#patch() updates the player's data. Player data doesn't automatically get updated!
-        if (player.isImpostor && !player.isDead && !player.disconnected) impostors.push(player);
-    }
+    console.log(`Impostors: `, game.players.filter(p => p.isImpostor && !p.isDead && !p.disconnected).map(p => p.name));
 });
 ```
+
+### 
 
 ## Documentation
 

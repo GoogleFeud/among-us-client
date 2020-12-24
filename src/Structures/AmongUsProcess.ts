@@ -20,6 +20,7 @@ export interface AmongUsProcessSettings {
 
 const defaultSettings: AmongUsProcessSettings = {
     gameEventInterval: 750,
+    playerEvents: true,
     playerEventInterval: 750,
     gameVersion: "2020.12.9",
     resultsTimeout: 12000
@@ -126,14 +127,6 @@ export class AmongUsProcess extends EventEmitter {
     }
 
 
-    // -1 -> in lobby, menu, tasks (FOR FIRST GAME )
-    // on discission - -1
-    // on voting - 1
-    // on results - 3
-    // after first results, meetingHud is always 3
-    // discussion - -1
-    // voting - 1
-    // on results - 3
     getState() : number {
         const meetingHud = this.readMemory<number>("pointer", this.asm.modBaseAddr, this.addresses.meetingHud);
         const meetingHud_cachePtr = meetingHud === 0 ? 0 : this.readMemory<number>("uint32", meetingHud, this.addresses.meetingHudCachePtr);
@@ -178,6 +171,7 @@ export class AmongUsProcess extends EventEmitter {
             setTimeout(() => {
                 const openedProcess = MemoryJS.openProcess("Among Us.exe");
                 let gameAssembly;
+                // Attempt to get the GameAssembly module.
                 do {
                     try {
                         gameAssembly = MemoryJS.findModule("GameAssembly.dll", process.th32ProcessID);
