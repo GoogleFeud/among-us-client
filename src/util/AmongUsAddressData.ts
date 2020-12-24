@@ -14,7 +14,7 @@ export interface GameDataSettings {
     tasksTotal: Array<number>,
     tasksCompleted: Array<number>,
     exiledPlayerId: Array<number>,
-    getHost: number
+    public: Array<number>
 }
 
 export interface PlayerDataSettings {

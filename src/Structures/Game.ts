@@ -1,6 +1,7 @@
 import { AmongUsProcess } from "./AmongUsProcess";
 import * as MemoryJS from "memoryjs";
 import {PlayerCollector} from "../Collectors/PlayerCollector";
+import { Player } from "./Player";
 
 
 export class Game {
@@ -11,9 +12,13 @@ export class Game {
     hostId?: number
     constructor(process: AmongUsProcess) {
         this.process = process;
-        this.code = this.process.readString(this.process.readMemory<number>("int32", this.process.asm.modBaseAddr, this.process.addresses.game.code)).split("\r\n")[1];
         this.started = false;
         this.players = new PlayerCollector(this);
+        this.code = this.process.readString(this.process.readMemory<number>("int32", this.process.asm.modBaseAddr, this.process.addresses.game.code)).split("\r\n")[1];
+    }
+
+    isPublic() : number {
+        return this.process.readMemory<number>("byte", this.process.asm.modBaseAddr, this.process.addresses.game.public, 0);
     }
 
     //------ Get and set player speed. ------

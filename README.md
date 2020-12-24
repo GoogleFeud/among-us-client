@@ -69,6 +69,16 @@ proc.on("startGame", game => {
 });
 ```
 
+### Do something when somebody gets murdered
+
+**Note: The killer parameter is a complete guess - the player who is the closest to the body is assumed to be the killer.**
+
+```js
+proc.on("playerDie", (player, killer) => {
+    console.log(`${player.name} got murdered by ${killer ? killer.name:"unknown"}!`);
+});
+```
+
 ### 
 
 ## Documentation

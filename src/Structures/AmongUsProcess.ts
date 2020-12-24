@@ -59,7 +59,6 @@ export class AmongUsProcess extends EventEmitter {
             // Step 2: Get the game state 
 
             const state = this.getState();
-            console.log(state);
             // If the player is in the menu but there is a game object
             if (state === AMONG_US_STATES.MENU && this.game) {
                 // If the game has started, also emit the endGame event.
@@ -133,7 +132,6 @@ export class AmongUsProcess extends EventEmitter {
         const meetingHudState = meetingHud_cachePtr === 0 ? 4 : this.readMemory("int", meetingHud, this.addresses.meetingHudState, 4) as number;
         const state = this.readMemory("int", this.asm.modBaseAddr, this.addresses.game.state);
         let resultTimeout;
-        console.log("RAW MEETING STATE: ", meetingHudState);
         switch(state) {
         case 0: 
         case undefined:
@@ -142,6 +140,7 @@ export class AmongUsProcess extends EventEmitter {
         case 3:
             return AMONG_US_STATES.LOBBY;
         default:
+            // When there are around 15 seconds left for voting - the hud state switches to 2.
             if (meetingHudState === 1 || meetingHudState === 2) return AMONG_US_STATES.VOTING;
             else if (this.game && this.game.started && meetingHudState > 3) {
                 this.meetingHudResults = true;
