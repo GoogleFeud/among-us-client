@@ -21,6 +21,7 @@ For now you can:
 - Transpile the source code to javascript, if you don't use typescript (`tsc`)
 - Import the AmongUsProcess where you need it!
 
+
 ## Examples
 
 ### Listen to in-game events
@@ -80,7 +81,3 @@ proc.on("playerDie", (player, killer) => {
 ```
 
 ### 
-
-## Documentation
-
-Coming soon!
