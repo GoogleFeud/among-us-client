@@ -25,9 +25,6 @@ For now you can:
 
 **Link:** https://googlefeud.github.io/among-us-client/
 
-Docs are built using `typedoc`.     
-```npx typedoc --theme ./node_modules/typedoc-neo-theme/bin/default```
-
 ## Examples
 
 ### Listen to in-game events
