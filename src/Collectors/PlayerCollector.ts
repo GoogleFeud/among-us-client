@@ -11,6 +11,7 @@ export class PlayerCollector extends Map<number, Player> {
         this.fetch();
     }
 
+    /** Add a new player by providing a pointer to a player class. This method is used internally. */
     add(address: number) : Player|null {
         const buffer = Player.getPlayerBuffer(this.game.process, address);
         if (!buffer) return null;
@@ -20,6 +21,7 @@ export class PlayerCollector extends Map<number, Player> {
         return player;
     }
 
+    /** Fetches all players and **clears** the map. */
     fetch() : void {
         this.clear();
         // eslint-disable-next-line prefer-const
@@ -33,6 +35,7 @@ export class PlayerCollector extends Map<number, Player> {
         }
     }
 
+    /** Returns the address of the first player in the player array, and the length of the array. */
     fetchPlayerArray() : {count: number, firstPlayerAddress: number} {
         const process = this.game.process;
         const ptrToPlayerListStructure = process.readMemory<number>("ptr", process.asm.modBaseAddr, process.addresses.player.allPlayersPtr);
@@ -45,6 +48,7 @@ export class PlayerCollector extends Map<number, Player> {
 
     //--- Some nice utility methods
 
+    /** Filters all players in the map. Similar to [Array#map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map) */
     filter(cb: PlayerCollectorFilter) : Array<Player> {
         const res = [];
         for (const [, player] of this) {

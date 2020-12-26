@@ -1,20 +1,32 @@
 
 import * as MemoryJS from "memoryjs";
-import {AMONG_US_STATES, PROCESS_EVENT} from "../util/Constants";
-import {AddressData} from "../util/AmongUsAddressData";
+import {AMONG_US_STATES, PROCESS_EVENT} from "./util/Constants";
+import {AddressData} from "./util/AmongUsAddressData";
 import * as path from "path";
 import * as fs from "fs";
-import { Game } from "./Game";
+import { Game } from "./Structures/Game";
 import {EventEmitter} from "events";
-import { Player } from "./Player";
+import { Player } from "./Structures/Player";
 
 export type ScanCallback = (pc: AmongUsProcess) => void
 
 export interface AmongUsProcessSettings {
+    /** If this is set to false, player objects won't automatically update and you won't receive events such as [[playerDie]], [[playerEject]], and [[playerDisconnect]]. 
+     * If you want performance, and don't need player data to be up-to-date, then you can disable this option and update the players where you need to using [[Player.patch]]. 
+     */
     playerEvents?: boolean
+    /**
+     * How often players update in milliseconds.
+     */
     playerEventInterval?: number
     gameEventInterval: number
+    /**
+     * How long the results phase should last. In the actual game is lasts around 5 seconds.
+     */
     resultsTimeout: number
+    /**
+     * Among us version 
+     */
     gameVersion: string
 }
 
@@ -23,7 +35,7 @@ const defaultSettings: AmongUsProcessSettings = {
     playerEvents: true,
     playerEventInterval: 750,
     gameVersion: "2020.12.9",
-    resultsTimeout: 12000
+    resultsTimeout: 15000
 };
 
 
@@ -33,6 +45,7 @@ export class AmongUsProcess extends EventEmitter {
     addresses: AddressData
     settings: AmongUsProcessSettings
     game?: Game
+
     cachedState: number
 
     private meetingHudResults?: boolean
@@ -46,7 +59,7 @@ export class AmongUsProcess extends EventEmitter {
 
         let playerInterval = -1;
 
-        this.cachedState = 0;
+        this.cachedState = -99;
     
         const interval = setInterval(() => {
             // Step 1: Check if the among us process that is connected to this instance has been closed
@@ -59,46 +72,51 @@ export class AmongUsProcess extends EventEmitter {
             // Step 2: Get the game state 
 
             const state = this.getState();
-            // If the player is in the menu but there is a game object
-            if (state === AMONG_US_STATES.MENU && this.game) {
-                // If the game has started, also emit the endGame event.
-                if (this.game.started) this.emit("endGame", this.game, false);
-                this.emit("leaveGame", this.game);
-                delete this.game;
-            } 
+    
+            if (this.game) {
 
-            else if (state === AMONG_US_STATES.LOBBY && !this.game) {
+                // If the player is in the menu but there is a game object
+                if (state === AMONG_US_STATES.MENU) {
+                    // If the game has started, also emit the endGame event.
+                    if (this.game.started) this.emit("endGame", this.game, false);
+                    this.emit("leaveGame", this.game);
+                    delete this.game;
+                } 
+
+                // Step 3: If the current game state is TASKS, and game.started = false, make game.started = true
+                else if (state === AMONG_US_STATES.TASKS && !this.game.started) {
+                    this.game.started = true;
+                    this.emit("startGame", this.game);
+                    this.emit("tasks", this);
+                }
+
+                // Step 4: If the current game state is LOBBY
+                else if (state === AMONG_US_STATES.LOBBY && this.game.started) {
+                    this.emit("endGame", this.game, true);
+                    this.game.started = false;
+                }
+
+                else if (state !== this.cachedState && (this.game as Game).started) {
+                    switch (state) {
+                    case AMONG_US_STATES.TASKS:
+                        this.emit("tasks", this);
+                        break;
+                    case AMONG_US_STATES.DISCUSSION:
+                        this.emit("discussion", this);
+                        break;
+                    case AMONG_US_STATES.RESULTS:
+                        this.emit("results", this);
+                        break;
+                    case AMONG_US_STATES.VOTING:
+                        this.emit("voting", this);
+                        break;
+                    }
+                }
+
+            } 
+            else if (state === AMONG_US_STATES.LOBBY) {
                 this.game = new Game(this);
                 this.emit("joinGame", this.game);
-            }
-
-            // Step 3: If the current game state is TASKS, and game.started = false, make game.started = true
-            else if (this.game && state === AMONG_US_STATES.TASKS && !this.game.started) {
-                this.game.started = true;
-                this.emit("startGame", this.game);
-            }
-
-            // Step 4: If the current game state is LOBBY
-            else if (this.game && state === AMONG_US_STATES.LOBBY && this.game.started) {
-                this.emit("endGame", this.game, true);
-                this.game.started = false;
-            }
-
-            if (this.game && this.game.started && state !== this.cachedState) {
-                switch (state) {
-                case AMONG_US_STATES.TASKS:
-                    this.emit("tasks", this);
-                    break;
-                case AMONG_US_STATES.DISCUSSION:
-                    this.emit("discussion", this);
-                    break;
-                case AMONG_US_STATES.RESULTS:
-                    this.emit("results", this);
-                    break;
-                case AMONG_US_STATES.VOTING:
-                    this.emit("voting", this);
-                    break;
-                }
             }
 
             this.cachedState = state;
@@ -154,6 +172,7 @@ export class AmongUsProcess extends EventEmitter {
     }
 
 
+    /** Gets all open among us processes. This should be ran once. */
     static all(settings: Partial<AmongUsProcessSettings> = {}) : Array<AmongUsProcess> {
         const processes = [];
         for (const process of MemoryJS.getProcesses()) {
@@ -162,6 +181,17 @@ export class AmongUsProcess extends EventEmitter {
         return processes;
     }
 
+    /** Scan for among us processes. The callback will be executed when a new process is found.
+     * 
+     * Example:
+     * 
+     * ```js
+     * AmongUsProcess.scan(process => {
+     * console.log("Found a new among us process!");
+     * console.log(process.game);
+     * });
+     * ```
+     */
     static scan(cb: ScanCallback, settings: Partial<AmongUsProcessSettings> = {}, interval = 1000, cancelOnFirstFind = true) : void {
         const foundProcesses: Array<number> = [];
         const inv = setInterval(() => {
@@ -185,6 +215,8 @@ export class AmongUsProcess extends EventEmitter {
         }, interval);
     }
 
+
+    /** Get the current version of among us that is installed. */
     static getVersion() : string|null {
         const unityAnalytics = path.resolve(`${(process.env.LOCALAPPDATA || "")}Low`, "Innersloth/Among Us/Unity/6b8b0d91-4a20-4a00-a3e4-4da4a883a5f0/Analytics/values");
         if (!fs.existsSync(unityAnalytics)) return null;
@@ -218,23 +250,110 @@ export class AmongUsProcess extends EventEmitter {
         return buffer.toString("utf8").replace(/\0/g, "");
     }
 
-
 }
+
+
+/** 
+ * Emitted when a player joins an among us game.
+ * @asMemberOf AmongUsProcess
+ * @event
+ */
+declare function joinGame(game: Game) : void;
+
+/** 
+ * Emitted when the game starts
+ * @asMemberOf AmongUsProcess
+ * @event
+ */
+declare function startGame(game: Game) : void;
+
+/** 
+ * Emitted when the player leaves a game
+ * @asMemberOf AmongUsProcess
+ * @event
+ */
+declare function leaveGame(game: Game) : void;
+
+/**
+ * Emitted when a game ends.
+ * @param stayedInLobby If the player clicks on the "Play Again" button in the game over screen
+ * @asMemberOf AmongUsProcess
+ * @event
+ */
+declare function endGame(game: Game, stayedInLobby: boolean) : void;
+
+
+/**
+ * Emitted when a player dies.
+ * @param player The player who died
+ * @param killer The impostor which killed the player. The impostor which is the closest to the player is determined to be the killer.
+ * @asMemberOf AmongUsProcess
+ * @event
+ */
+
+declare function playerDie(player: Player, killer?: Player) : void;
+
+
+/**
+ * Emitted when a player gets ejected
+ * @asMemberOf AmongUsProcess
+ * @event 
+ */
+declare function playerEject(player: Player) : void;
+
+/**
+ * Emitted when any player (dead, alive) disconnects
+ * @asMemberOf AmongUsProcess
+ * @event 
+ */
+declare function playerDisconnect(player: Player) : void;
+
+/**
+ * Emitted when the discussion phase begins
+ * @asMemberOf AmongUsProcess
+ * @event 
+ */
+declare function discussion(game: Game) : void;
+
+/**
+ * Emitted when the voting phase begins
+ * @asMemberOf AmongUsProcess
+ * @event 
+ */
+declare function voting(game: Game) : void;
+
+/**
+ * Emitted when the results phase begins.
+ * @asMemberOf AmongUsProcess
+ * @event 
+ */
+
+declare function results(game: Game) : void;
+
+/**
+ * Emitted when the tasks phase begins
+ * @asMemberOf AmongUsProcess
+ * @event  
+ */
+
+declare function tasks(game: Game) : void;
 
 export declare interface AmongUsProcess {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     on(event: PROCESS_EVENT, cb: (...args: Array<any>) => void) : this;
-    on(event: "joinGame", cb: (game: Game) => void) : this;
-    on(event: "startGame", cb: (game: Game) => void) : this;
-    on(event: "leaveGame", cb: (game: Game) => void) : this;
-    on(event: "endGame", cb: (game: Game) => void) : this;
-    on(event: "playerDie", cb: (player: Player, killer?: Player) => void) : this;
-    on(event: "playerEject", cb: (player: Player) => void) : this;
-    on(event: "playerDisconnect", cb: (player: Player) => void) : this;
-    on(event: "discussion", cb: (player: Player) => void) : this;
-    on(event: "voting", cb: (player: Player) => void) : this;
-    on(event: "results", cb: (player: Player) => void) : this;
-    on(event: "tasks", cb: (player: Player) => void) : this;
+
+    /** @event joinGame Emitted when the player joins a game */
+    on(event: "joinGame", cb: typeof joinGame) : this;
+    on(event: "startGame", cb: typeof startGame) : this;
+    on(event: "leaveGame", cb: typeof leaveGame) : this;
+    on(event: "endGame", cb: typeof endGame) : this;
+    on(event: "playerDie", cb: typeof playerDie) : this;
+    on(event: "playerEject", cb: typeof playerEject) : this;
+    on(event: "playerDisconnect", cb: typeof playerDisconnect) : this;
+    on(event: "discussion", cb: typeof discussion) : this;
+    on(event: "voting", cb: typeof voting) : this;
+    on(event: "results", cb: typeof results) : this;
+    on(event: "tasks", cb: typeof tasks) : this;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     emit(event: PROCESS_EVENT, ...data: Array<any>) : boolean;
 }

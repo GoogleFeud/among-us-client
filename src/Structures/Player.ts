@@ -1,7 +1,7 @@
 import { Game } from "./Game";
 import Structon from "structron";
 import * as MemoryJS from "memoryjs";
-import { AmongUsProcess } from "./AmongUsProcess";
+import { AmongUsProcess } from "../AmongUsProcess";
 import { findClosestPlayer } from "../util/utils";
 import { AMONG_US_STATES } from "../util/Constants";
 
@@ -20,16 +20,7 @@ export const PlayerStructure = new Structon()
     .addMember(Structon.TYPES.SKIP(2), "...")
     .addMember(Structon.TYPES.UINT, "objectPointer");
 
-export interface PlayerBaseInfo {
-        name?: string
-        id?: number
-        color?: number
-        hat?: number
-        pet?: number
-        skin?: number
-        x?: number
-        y?: number
-}
+export type PlayerResolvable = number|Buffer;
 
 export class Player {
     game: Game
@@ -47,7 +38,7 @@ export class Player {
     y: number
     inVent?: number
     private playerControl?: number;
-    constructor(game: Game, playerPointer: number|Buffer) {
+    constructor(game: Game, playerPointer: PlayerResolvable) {
         this.game = game;
         this.fetchData(playerPointer);
         this.x = 0;
@@ -81,7 +72,7 @@ export class Player {
         }
     }
 
-    fetchData(playerPointer: number|Buffer) : this {
+    fetchData(playerPointer: PlayerResolvable) : this {
         const process = this.game.process;
         let buffer;
         if (playerPointer instanceof Buffer) buffer = playerPointer;
@@ -106,6 +97,7 @@ export class Player {
         return this;
     }
 
+    /** Updates player data. Use this method only if you have the [[AmongUsProcessSettings.playerEvents]] option disabled. */
     patch() : void {
         const process = this.game.process;
         const ptrToPlayerListStructure = process.readMemory<number>("ptr", process.asm.modBaseAddr, process.addresses.player.allPlayersPtr);

@@ -1,4 +1,4 @@
-import {AmongUsProcess} from "./Structures/AmongUsProcess";
+import {AmongUsProcess} from "./AmongUsProcess";
 
 
 export default AmongUsProcess;

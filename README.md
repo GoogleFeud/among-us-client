@@ -21,6 +21,12 @@ For now you can:
 - Transpile the source code to javascript, if you don't use typescript (`tsc`)
 - Import the AmongUsProcess where you need it!
 
+## Documentation
+
+**Link:** https://googlefeud.github.io/among-us-client/
+
+Docs are built using `typedoc`.     
+```npx typedoc --theme ./node_modules/typedoc-neo-theme/bin/default```
 
 ## Examples
 
@@ -80,4 +86,3 @@ proc.on("playerDie", (player, killer) => {
 });
 ```
 
-### 

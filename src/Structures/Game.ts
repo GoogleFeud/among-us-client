@@ -1,7 +1,6 @@
-import { AmongUsProcess } from "./AmongUsProcess";
+import { AmongUsProcess } from "../AmongUsProcess";
 import * as MemoryJS from "memoryjs";
 import {PlayerCollector} from "../Collectors/PlayerCollector";
-import { Player } from "./Player";
 
 
 export class Game {
@@ -9,7 +8,6 @@ export class Game {
     code: string
     started: boolean
     players: PlayerCollector
-    hostId?: number
     constructor(process: AmongUsProcess) {
         this.process = process;
         this.started = false;
