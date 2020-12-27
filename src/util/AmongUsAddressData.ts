@@ -31,7 +31,8 @@ export interface PlayerDataSettings {
     remoteX: Array<number>,
     remoteY: Array<number>,
     inVent: Array<number>,
-    ownerId: Array<number>
+    rpcColor: number,
+    clientId: number
 }
 
 export interface AddressData {
@@ -40,5 +41,6 @@ export interface AddressData {
     meetingHudCachePtr: Array<number>,
     meetingHudState: Array<number>,
     settings: AddressDataSettings,
-    player: PlayerDataSettings
+    player: PlayerDataSettings,
+    amongUsClient: Array<number>
 }

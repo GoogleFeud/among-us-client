@@ -1,5 +1,6 @@
 
 {
+    "amongUsClient": [29720404, 92, 0],
     "meetingHud": [29717412, 92, 0],
     "meetingHudCachePtr": [8],
     "meetingHudState": [132],
@@ -8,9 +9,7 @@
         "public": [29720404, 92, 0, 96],
         "code": [28254460, 92, 0, 32, 40],
         "tasksTotal": [29719528, 92, 0, 40],
-        "tasksCompleted": [29719528, 92, 0, 44],
-        "exiledPlayer": [29717500, 92, 0, 48],
-        "exiledPlayerId": [8]
+        "tasksCompleted": [29719528, 92, 0, 44]
     },
     "settings": {
         "speed": [29709768, 92, 20, 20],
@@ -31,6 +30,8 @@
         "localY": [96, 84],
         "remoteX": [96, 60],
         "remoteY": [96, 64],
-        "inVent": [49]
+        "inVent": [49],
+        "rpcColor": 9372384,
+        "clientId": 13580352
     }
 }

@@ -13,10 +13,8 @@ export class PlayerCollector extends Map<number, Player> {
 
     /** Add a new player by providing a pointer to a player class. This method is used internally. */
     add(address: number) : Player|null {
-        const buffer = Player.getPlayerBuffer(this.game.process, address);
-        if (!buffer) return null;
-        const player = new Player(this.game, buffer);
-        if (player.id === undefined || (player.id > 10 || player.id < 0)) return null;
+        const player = new Player(this.game, address);
+        if (!player || player.id === undefined || (player.id > 10 || player.id < 0)) return null;
         this.set(player.id || 0, player);
         return player;
     }

@@ -3,7 +3,7 @@ import Structon from "structron";
 import * as MemoryJS from "memoryjs";
 import { AmongUsProcess } from "../AmongUsProcess";
 import { findClosestPlayer } from "../util/utils";
-import { AMONG_US_STATES } from "../util/Constants";
+import { AMONG_US_STATES, PLAYER_COLORS } from "../util/Constants";
 
 export const PlayerStructure = new Structon()
     .addMember(Structon.TYPES.SKIP(8), "...")
@@ -20,17 +20,15 @@ export const PlayerStructure = new Structon()
     .addMember(Structon.TYPES.SKIP(2), "...")
     .addMember(Structon.TYPES.UINT, "objectPointer");
 
-export type PlayerResolvable = number|Buffer;
-
 export class Player {
     game: Game
     name?: string
     id?: number
+    clientId?: number
     color?: number
     hat?: number
     pet?: number
     skin?: number
-    taskPointer?: number
     isImpostor?: number
     private _isDead?: number
     private _disconnected?: number
@@ -38,11 +36,13 @@ export class Player {
     y: number
     inVent?: number
     private playerControl?: number;
-    constructor(game: Game, playerPointer: PlayerResolvable) {
+    private playerInfo: number;
+    constructor(game: Game, playerPointer: number) {
         this.game = game;
         this.fetchData(playerPointer);
         this.x = 0;
         this.y = 0;
+        this.playerInfo = playerPointer;
     }
 
     get isDead() : number|undefined {
@@ -72,15 +72,21 @@ export class Player {
         }
     }
 
-    fetchData(playerPointer: PlayerResolvable) : this {
+    /** **You can easily get banned for hacking using this method on players other than yourself.** */
+    setColor(color: PLAYER_COLORS) : void {
+        if (!this.playerControl) return;
+        MemoryJS.callFunction(this.game.process.process.handle, [{type: MemoryJS.T_INT, value: this.playerControl}, {type: MemoryJS.T_INT, value: color}], MemoryJS.T_VOID, this.game.process.asm.modBaseAddr + this.game.process.addresses.player.rpcColor);
+    }
+
+    fetchData(playerPointer: number) : boolean {
         const process = this.game.process;
-        let buffer;
-        if (playerPointer instanceof Buffer) buffer = playerPointer;
-        else buffer = MemoryJS.readBuffer(
+        const buffer = MemoryJS.readBuffer(
             process.process.handle, 
             process.offsetAddress(playerPointer, process.addresses.player.offsets),
             process.addresses.player.bufferLength
         );
+        if (!PlayerStructure.validate(buffer)) return false;
+        this.playerInfo = playerPointer;
         const {data} = PlayerStructure.report(buffer, 0, {monitorUsage: false});
         this.name = process.readString(data.name);
         delete data.name;
@@ -94,7 +100,17 @@ export class Player {
         const positionOffsets = areCoordsLocal ? [process.addresses.player.localX, process.addresses.player.localY]:[process.addresses.player.remoteX, process.addresses.player.remoteY];
         this.x = process.readMemory<number>("float", data.objectPointer, positionOffsets[0]);
         this.y = process.readMemory<number>("float", data.objectPointer, positionOffsets[1]);
-        return this;
+
+        /**this.clientId = MemoryJS.callFunction<number>(this.game.process.process.handle, 
+            [
+                {type: MemoryJS.T_INT, value: this.game.process.offsetAddress(this.game.process.asm.modBaseAddr, this.game.process.addresses.amongUsClient)},
+                {type: MemoryJS.T_INT, value: this.playerControl}
+            ], 
+            MemoryJS.T_INT,
+            this.game.process.asm.modBaseAddr + this.game.process.addresses.player.clientId
+        ).returnValue; **/
+        
+        return true;
     }
 
     /** Updates player data. Use this method only if you have the [[AmongUsProcessSettings.playerEvents]] option disabled. */
@@ -105,15 +121,5 @@ export class Player {
         this.fetchData(allPlayersArray + process.addresses.player.addrPtr + ((this.id || 0) * 4));
     }
 
-
-    static getPlayerBuffer(process: AmongUsProcess, ptr: number) : Buffer|null {
-        const buffer = MemoryJS.readBuffer(
-            process.process.handle, 
-            process.offsetAddress(ptr, process.addresses.player.offsets),
-            process.addresses.player.bufferLength
-        );
-        if (!PlayerStructure.validate(buffer)) return null;
-        return buffer;
-    }
 
 }

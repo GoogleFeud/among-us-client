@@ -120,6 +120,7 @@
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_structures_player_.player.html#_disconnected" class="tsd-kind-icon">_disconnected</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_structures_player_.player.html#_isdead" class="tsd-kind-icon">_isDead</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_structures_player_.player.html#clientid" class="tsd-kind-icon">clientId</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_structures_player_.player.html#color" class="tsd-kind-icon">color</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_structures_player_.player.html#game" class="tsd-kind-icon">game</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_structures_player_.player.html#hat" class="tsd-kind-icon">hat</a></li>
@@ -129,8 +130,8 @@
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_structures_player_.player.html#name" class="tsd-kind-icon">name</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_structures_player_.player.html#pet" class="tsd-kind-icon">pet</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_structures_player_.player.html#playercontrol" class="tsd-kind-icon">playerControl</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_structures_player_.player.html#playerinfo" class="tsd-kind-icon">playerInfo</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_structures_player_.player.html#skin" class="tsd-kind-icon">skin</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_structures_player_.player.html#taskpointer" class="tsd-kind-icon">taskPointer</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_structures_player_.player.html#x" class="tsd-kind-icon">x</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_structures_player_.player.html#y" class="tsd-kind-icon">y</a></li>
 							</ul>
@@ -147,7 +148,7 @@
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_structures_player_.player.html#fetchdata" class="tsd-kind-icon">fetchData</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_structures_player_.player.html#patch" class="tsd-kind-icon">patch</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_structures_player_.player.html#getplayerbuffer" class="tsd-kind-icon">getPlayerBuffer</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_structures_player_.player.html#setcolor" class="tsd-kind-icon">setColor</a></li>
 							</ul>
 						</section>
 					</div>
@@ -159,13 +160,13 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Player<span class="tsd-signature-symbol">(</span>game<span class="tsd-signature-symbol">: </span><a href="_structures_game_.game.html" class="tsd-signature-type">Game</a>, playerPointer<span class="tsd-signature-symbol">: </span><a href="../modules/_structures_player_.html#playerresolvable" class="tsd-signature-type">PlayerResolvable</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_structures_player_.player.html" class="tsd-signature-type">Player</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Player<span class="tsd-signature-symbol">(</span>game<span class="tsd-signature-symbol">: </span><a href="_structures_game_.game.html" class="tsd-signature-type">Game</a>, playerPointer<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_structures_player_.player.html" class="tsd-signature-type">Player</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in src/Structures/Player.ts:40</li>
+									<li>Defined in src/Structures/Player.ts:39</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -174,7 +175,7 @@
 									<h5>game: <a href="_structures_game_.game.html" class="tsd-signature-type">Game</a></h5>
 								</li>
 								<li>
-									<h5>playerPointer: <a href="../modules/_structures_player_.html#playerresolvable" class="tsd-signature-type">PlayerResolvable</a></h5>
+									<h5>playerPointer: <span class="tsd-signature-type">number</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_structures_player_.player.html" class="tsd-signature-type">Player</a></h4>
@@ -190,7 +191,7 @@
 					<div class="tsd-signature tsd-kind-icon">_disconnected<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in src/Structures/Player.ts:36</li>
+							<li>Defined in src/Structures/Player.ts:34</li>
 						</ul>
 					</aside>
 				</section>
@@ -200,7 +201,17 @@
 					<div class="tsd-signature tsd-kind-icon">_is<wbr>Dead<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in src/Structures/Player.ts:35</li>
+							<li>Defined in src/Structures/Player.ts:33</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="clientid" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> client<wbr>Id</h3>
+					<div class="tsd-signature tsd-kind-icon">client<wbr>Id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in src/Structures/Player.ts:27</li>
 						</ul>
 					</aside>
 				</section>
@@ -210,7 +221,7 @@
 					<div class="tsd-signature tsd-kind-icon">color<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in src/Structures/Player.ts:29</li>
+							<li>Defined in src/Structures/Player.ts:28</li>
 						</ul>
 					</aside>
 				</section>
@@ -220,7 +231,7 @@
 					<div class="tsd-signature tsd-kind-icon">game<span class="tsd-signature-symbol">:</span> <a href="_structures_game_.game.html" class="tsd-signature-type">Game</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in src/Structures/Player.ts:26</li>
+							<li>Defined in src/Structures/Player.ts:24</li>
 						</ul>
 					</aside>
 				</section>
@@ -230,7 +241,7 @@
 					<div class="tsd-signature tsd-kind-icon">hat<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in src/Structures/Player.ts:30</li>
+							<li>Defined in src/Structures/Player.ts:29</li>
 						</ul>
 					</aside>
 				</section>
@@ -240,7 +251,7 @@
 					<div class="tsd-signature tsd-kind-icon">id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in src/Structures/Player.ts:28</li>
+							<li>Defined in src/Structures/Player.ts:26</li>
 						</ul>
 					</aside>
 				</section>
@@ -250,7 +261,7 @@
 					<div class="tsd-signature tsd-kind-icon">in<wbr>Vent<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in src/Structures/Player.ts:39</li>
+							<li>Defined in src/Structures/Player.ts:37</li>
 						</ul>
 					</aside>
 				</section>
@@ -260,7 +271,7 @@
 					<div class="tsd-signature tsd-kind-icon">is<wbr>Impostor<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in src/Structures/Player.ts:34</li>
+							<li>Defined in src/Structures/Player.ts:32</li>
 						</ul>
 					</aside>
 				</section>
@@ -270,7 +281,7 @@
 					<div class="tsd-signature tsd-kind-icon">name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in src/Structures/Player.ts:27</li>
+							<li>Defined in src/Structures/Player.ts:25</li>
 						</ul>
 					</aside>
 				</section>
@@ -280,7 +291,7 @@
 					<div class="tsd-signature tsd-kind-icon">pet<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in src/Structures/Player.ts:31</li>
+							<li>Defined in src/Structures/Player.ts:30</li>
 						</ul>
 					</aside>
 				</section>
@@ -290,7 +301,17 @@
 					<div class="tsd-signature tsd-kind-icon">player<wbr>Control<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in src/Structures/Player.ts:40</li>
+							<li>Defined in src/Structures/Player.ts:38</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a name="playerinfo" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> player<wbr>Info</h3>
+					<div class="tsd-signature tsd-kind-icon">player<wbr>Info<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in src/Structures/Player.ts:39</li>
 						</ul>
 					</aside>
 				</section>
@@ -300,17 +321,7 @@
 					<div class="tsd-signature tsd-kind-icon">skin<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in src/Structures/Player.ts:32</li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="taskpointer" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> task<wbr>Pointer</h3>
-					<div class="tsd-signature tsd-kind-icon">task<wbr>Pointer<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in src/Structures/Player.ts:33</li>
+							<li>Defined in src/Structures/Player.ts:31</li>
 						</ul>
 					</aside>
 				</section>
@@ -320,7 +331,7 @@
 					<div class="tsd-signature tsd-kind-icon">x<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in src/Structures/Player.ts:37</li>
+							<li>Defined in src/Structures/Player.ts:35</li>
 						</ul>
 					</aside>
 				</section>
@@ -330,7 +341,7 @@
 					<div class="tsd-signature tsd-kind-icon">y<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in src/Structures/Player.ts:38</li>
+							<li>Defined in src/Structures/Player.ts:36</li>
 						</ul>
 					</aside>
 				</section>
@@ -414,22 +425,22 @@
 					<a name="fetchdata" class="tsd-anchor"></a>
 					<h3>fetch<wbr>Data</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">fetch<wbr>Data<span class="tsd-signature-symbol">(</span>playerPointer<span class="tsd-signature-symbol">: </span><a href="../modules/_structures_player_.html#playerresolvable" class="tsd-signature-type">PlayerResolvable</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">fetch<wbr>Data<span class="tsd-signature-symbol">(</span>playerPointer<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in src/Structures/Player.ts:75</li>
+									<li>Defined in src/Structures/Player.ts:81</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>playerPointer: <a href="../modules/_structures_player_.html#playerresolvable" class="tsd-signature-type">PlayerResolvable</a></h5>
+									<h5>playerPointer: <span class="tsd-signature-type">number</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -443,7 +454,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in src/Structures/Player.ts:101</li>
+									<li>Defined in src/Structures/Player.ts:117</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography tsd-comment-shorttext">
@@ -455,32 +466,31 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
-					<a name="getplayerbuffer" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagStatic">Static</span> get<wbr>Player<wbr>Buffer</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Player<wbr>Buffer<span class="tsd-signature-symbol">(</span>process<span class="tsd-signature-symbol">: </span><a href="_amongusprocess_.amongusprocess.html" class="tsd-signature-type">AmongUsProcess</a>, ptr<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Buffer</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span></li>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="setcolor" class="tsd-anchor"></a>
+					<h3>set<wbr>Color</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">set<wbr>Color<span class="tsd-signature-symbol">(</span>color<span class="tsd-signature-symbol">: </span><a href="../enums/_util_constants_.player_colors.html" class="tsd-signature-type">PLAYER_COLORS</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in src/Structures/Player.ts:109</li>
+									<li>Defined in src/Structures/Player.ts:76</li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography tsd-comment-shorttext">
+								<div class="lead">
+									<p>*You can easily get banned for hacking using this method on players other than yourself.**</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>process: <a href="_amongusprocess_.amongusprocess.html" class="tsd-signature-type">AmongUsProcess</a></h5>
-								</li>
-								<li>
-									<h5>ptr: <span class="tsd-signature-type">number</span></h5>
+									<h5>color: <a href="../enums/_util_constants_.player_colors.html" class="tsd-signature-type">PLAYER_COLORS</a></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Buffer</span>
-								<span class="tsd-signature-symbol"> | </span>
-								<span class="tsd-signature-type">null</span>
-							</h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -503,6 +513,9 @@
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
 								<a href="_structures_player_.player.html#_isdead" class="tsd-kind-icon">_is<wbr>Dead</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="_structures_player_.player.html#clientid" class="tsd-kind-icon">client<wbr>Id</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="_structures_player_.player.html#color" class="tsd-kind-icon">color</a>
@@ -531,11 +544,11 @@
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
 								<a href="_structures_player_.player.html#playercontrol" class="tsd-kind-icon">player<wbr>Control</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="_structures_player_.player.html#skin" class="tsd-kind-icon">skin</a>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+								<a href="_structures_player_.player.html#playerinfo" class="tsd-kind-icon">player<wbr>Info</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="_structures_player_.player.html#taskpointer" class="tsd-kind-icon">task<wbr>Pointer</a>
+								<a href="_structures_player_.player.html#skin" class="tsd-kind-icon">skin</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="_structures_player_.player.html#x" class="tsd-kind-icon">x</a>
@@ -555,16 +568,13 @@
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_structures_player_.player.html#patch" class="tsd-kind-icon">patch</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
-								<a href="_structures_player_.player.html#getplayerbuffer" class="tsd-kind-icon">get<wbr>Player<wbr>Buffer</a>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_structures_player_.player.html#setcolor" class="tsd-kind-icon">set<wbr>Color</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-type-alias tsd-parent-kind-module root">
-						<a href="../modules/_structures_player_.html#playerresolvable" class="tsd-kind-icon">Player<wbr>Resolvable</a>
-					</li>
 					<li class=" tsd-kind-variable tsd-parent-kind-module root">
 						<a href="../modules/_structures_player_.html#playerstructure" class="tsd-kind-icon">Player<wbr>Structure</a>
 					</li>
