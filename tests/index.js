@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 /* eslint-disable @typescript-eslint/no-var-requires */
 
-const {AmongUsProcess} = require("../dist/Structures/AmongUsProcess");
+const {AmongUsProcess} = require("../dist/AmongUsProcess");
 const fs = require("fs");
 
 

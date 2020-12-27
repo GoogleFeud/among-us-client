@@ -13,6 +13,7 @@ export interface GameDataSettings {
     code: Array<number>,
     tasksTotal: Array<number>,
     tasksCompleted: Array<number>,
+    exiledPlayer: Array<number>,
     exiledPlayerId: Array<number>,
     public: Array<number>
 }

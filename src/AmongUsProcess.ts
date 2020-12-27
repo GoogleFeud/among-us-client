@@ -55,7 +55,7 @@ export class AmongUsProcess extends EventEmitter {
         this.settings = Object.assign(defaultSettings, settings);
         this.process = process;
         this.asm = asm;
-        this.addresses = require(`../../data/${this.settings.gameVersion}.json`);
+        this.addresses = require(`../data/${this.settings.gameVersion}.json`);
 
         let playerInterval = -1;
 
@@ -104,7 +104,7 @@ export class AmongUsProcess extends EventEmitter {
                     case AMONG_US_STATES.DISCUSSION:
                         this.emit("discussion", this);
                         break;
-                    case AMONG_US_STATES.RESULTS:
+                    case AMONG_US_STATES.RESULTS: 
                         this.emit("results", this);
                         break;
                     case AMONG_US_STATES.VOTING:
@@ -147,8 +147,9 @@ export class AmongUsProcess extends EventEmitter {
     getState() : number {
         const meetingHud = this.readMemory<number>("pointer", this.asm.modBaseAddr, this.addresses.meetingHud);
         const meetingHud_cachePtr = meetingHud === 0 ? 0 : this.readMemory<number>("uint32", meetingHud, this.addresses.meetingHudCachePtr);
-        const meetingHudState = meetingHud_cachePtr === 0 ? 4 : this.readMemory("int", meetingHud, this.addresses.meetingHudState, 4) as number;
+        const meetingHudState = meetingHud_cachePtr === 0 ? 4 : this.readMemory("int", meetingHud, this.addresses.meetingHudState, 5) as number;
         const state = this.readMemory("int", this.asm.modBaseAddr, this.addresses.game.state);
+        if (meetingHudState == 1 && (!this.game || !this.game.started)) MemoryJS.writeMemory(this.process.handle, this.offsetAddress(meetingHud, this.addresses.meetingHudState), 5, "int");
         let resultTimeout;
         switch(state) {
         case 0: 
@@ -158,8 +159,10 @@ export class AmongUsProcess extends EventEmitter {
         case 3:
             return AMONG_US_STATES.LOBBY;
         default:
-            // When there are around 15 seconds left for voting - the hud state switches to 2.
-            if (meetingHudState === 1 || meetingHudState === 2) return AMONG_US_STATES.VOTING;
+            if (meetingHudState === 1 || meetingHudState === 2) {
+                if (!this.meetingHudResults) this.meetingHudResults = true;
+                return AMONG_US_STATES.VOTING;
+            }
             else if (this.game && this.game.started && meetingHudState > 3) {
                 this.meetingHudResults = true;
                 return AMONG_US_STATES.DISCUSSION;
@@ -209,8 +212,8 @@ export class AmongUsProcess extends EventEmitter {
                     }
                 }while(!gameAssembly);
                 cb(new AmongUsProcess(settings, openedProcess, gameAssembly));
+                if (cancelOnFirstFind) return clearInterval(inv);
                 foundProcesses.push(process.th32ProcessID);
-                if (cancelOnFirstFind) clearInterval(inv);
             }, 750);
         }, interval);
     }
@@ -276,11 +279,11 @@ declare function leaveGame(game: Game) : void;
 
 /**
  * Emitted when a game ends.
- * @param stayedInLobby If the player clicks on the "Play Again" button in the game over screen
+ * @param stayedInLobby If the player left the game while it was still ongoing
  * @asMemberOf AmongUsProcess
  * @event
  */
-declare function endGame(game: Game, stayedInLobby: boolean) : void;
+declare function endGame(game: Game, leftDuringGame: boolean) : void;
 
 
 /**
