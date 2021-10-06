@@ -1,197 +1,272 @@
-<!doctype html>
-<html class="default no-js">
+<!DOCTYPE html>
+<html data-theme="dark">
+
 <head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>among-us-client</title>
-	<meta name="description" content="">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="assets/css/main.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title> Among Us Client</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link id="highlightTheme" rel="stylesheet" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  
+    <link href="assets/css/index.css" type="text/css" rel="stylesheet">
+    <script src="assets/js/index.js"></script>
+    <script>window.depth="";window.ab=false;</script>
+    
 </head>
+
 <body>
-<header>
-	<div class="tsd-page-toolbar">
-		<div class="container">
-			<div class="table-wrap">
-				<div class="table-cell" id="tsd-search" data-index="assets/js/search.json" data-base=".">
-					<div class="field">
-						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
-						<input id="tsd-search-field" type="text" />
-					</div>
-					<ul class="results">
-						<li class="state loading">Preparing search index...</li>
-						<li class="state failure">The search index is not available</li>
-					</ul>
-					<ul class="results-priority" style="display:none">
-					</ul>
-					<a href="index.html" class="title">among-us-client</a>
-				</div>
-				<div class="table-cell" id="tsd-widgets">
-					<div id="tsd-filter">
-						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
-						<div class="tsd-filter-group">
-							<div class="tsd-select" id="tsd-filter-visibility">
-								<span class="tsd-select-label">All</span>
-								<ul class="tsd-select-list">
-									<li data-value="public">Public</li>
-									<li data-value="protected">Public/Protected</li>
-									<li data-value="private" class="selected">All</li>
-								</ul>
-							</div>
-							<input type="checkbox" id="tsd-filter-inherited" checked />
-							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
-							<input type="checkbox" id="tsd-filter-externals" checked />
-							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
-							<input type="checkbox" id="tsd-filter-only-exported" />
-							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
-						</div>
-					</div>
-					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="tsd-page-title">
-		<div class="container">
-			<ul class="tsd-breadcrumb">
-			</ul>
-		</div>
-	</div>
-</header>
-<div class="container container-main">
-	<div class="row">
-		<div class="col-3 col-menu menu-sticky-wrap menu-highlight">
-			<nav class="tsd-navigation primary">
-				<ul>
-					<li class="globals  ">
-						<a href="globals.html"><em>Globals</em></a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="modules/_amongusprocess_.html">AmongUsProcess</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="modules/_collectors_playercollector_.html">Collectors/PlayerCollector</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="modules/_structures_game_.html">Structures/Game</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="modules/_structures_player_.html">Structures/Player</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="modules/_util_amongusaddressdata_.html">util/AmongUsAddressData</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="modules/_util_constants_.html">util/Constants</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="modules/_util_utils_.html">util/utils</a>
-					</li>
-				</ul>
-			</nav>
-		</div>
-		<div class="col-7 offset-3 col-content">
-			<h1>among-us-client</h1>
-			<div class="tsd-panel tsd-typography">
-				<a href="#among-us-client" id="among-us-client" style="color: inherit; text-decoration: none;">
-					<h1>among-us-client</h1>
-				</a>
-				<p>Get and modify data from a local among us game. This library was <strong>NOT</strong> made so you can cheat in public lobbies. That&#39;s for losers. </p>
-				<p><strong>This library is NOWHERE near stable. There are a lot of known bugs and also a ton of missing features. Expect every new commit to contain a breaking change. We&#39;re looking for contributors!</strong></p>
-				<a href="#install" id="install" style="color: inherit; text-decoration: none;">
-					<h2>Install</h2>
-				</a>
-				<a href="#requirements" id="requirements" style="color: inherit; text-decoration: none;">
-					<h3>Requirements</h3>
-				</a>
-				<ul>
-					<li>Windows</li>
-					<li>Latest among us version (2020.12.9)</li>
-					<li>Node.js 14+</li>
-				</ul>
-				<a href="#install-1" id="install-1" style="color: inherit; text-decoration: none;">
-					<h3>Install</h3>
-				</a>
-				<p><strong>This library will be published to npm when we think it&#39;s ready.</strong><br>For now you can:</p>
-				<ul>
-					<li>Clone or download this repository</li>
-					<li>Install all dependencies and dev-dependencies (<code>npm i</code>) </li>
-					<li>Transpile the source code to javascript, if you don&#39;t use typescript (<code>tsc</code>)</li>
-					<li>Import the AmongUsProcess where you need it!</li>
-				</ul>
-				<a href="#documentation" id="documentation" style="color: inherit; text-decoration: none;">
-					<h2>Documentation</h2>
-				</a>
-				<p><strong>Link:</strong> <a href="https://googlefeud.github.io/among-us-client/">https://googlefeud.github.io/among-us-client/</a></p>
-				<a href="#examples" id="examples" style="color: inherit; text-decoration: none;">
-					<h2>Examples</h2>
-				</a>
-				<a href="#listen-to-in-game-events" id="listen-to-in-game-events" style="color: inherit; text-decoration: none;">
-					<h3>Listen to in-game events</h3>
-				</a>
-				<pre><code class="language-js"><span class="hljs-keyword">const</span> AmongUsProcess = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;among-us-client&quot;</span>);
+  
+      <nav class="container-fluid navi">
+      <div class="row">
+        <div class="col-4">
+          <input class="form-control search" id="search" type="search" placeholder="Search..." aria-label="Search">
+        </div>
+        <div class="col-8">
+          <div class="row float-end row-cols-auto" style="margin-top:5px">
+            <div class="col clickable-icon" id="theme-icon"></div>
+            <div class="col">
+              <a href=https://github.com/GoogleFeud/among-us-client/tree/main class="clickable-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-github"
+                  viewBox="0 0 16 16">
+                  <path
+                    d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" />
+                </svg>
+              </a>
+             </div>
+            <div class="col">
+              <span style="font-size: 1.2em">v0.0.1</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-auto sidebar" id="sidebar">
+        
+    <h1 class="lib-name text-center"><a href="index.html">Among Us Client</a></h1>
+    
+    <p class="current-thing text-center">module <span class="module">among-us-client</span></p>
+    <div class="sidebar-members">
+    
+        <div class="sidebar-member">
+        <div class="collapsible-trigger">
+        <span class="collapsible-arrow open"></span>
+        <span class="sidebar-category">Modules</span>
+        </div>
+        <div class="collapsible-body open"> 
+        <span class="sidebar-category-member"><a href="m.util/index.html">util</a></span><span class="sidebar-category-member"><a href="m.Structures/index.html">Structures</a></span><span class="sidebar-category-member"><a href="m.Collectors/index.html">Collectors</a></span>
+        </div>
+        </div>
+    
+        <div class="sidebar-member">
+        <div class="collapsible-trigger">
+        <span class="collapsible-arrow open"></span>
+        <span class="sidebar-category">Classes</span>
+        </div>
+        <div class="collapsible-body open"> 
+        <span class="sidebar-category-member"><a href="class/AmongUsProcess.html">AmongUsProcess</a></span>
+        </div>
+        </div>
+    
+        <div class="sidebar-member">
+        <div class="collapsible-trigger">
+        <span class="collapsible-arrow open"></span>
+        <span class="sidebar-category">Interfaces</span>
+        </div>
+        <div class="collapsible-body open"> 
+        <span class="sidebar-category-member"><a href="interface/AmongUsProcessSettings.html">AmongUsProcessSettings</a></span>
+        </div>
+        </div>
+    
+        <div class="sidebar-member">
+        <div class="collapsible-trigger">
+        <span class="collapsible-arrow open"></span>
+        <span class="sidebar-category">Types</span>
+        </div>
+        <div class="collapsible-body open"> 
+        <span class="sidebar-category-member"><a href="type/ScanCallback.html">ScanCallback</a></span>
+        </div>
+        </div>
+    
+    </div>
+    
+      </div>
+      <div id="content" class="col content">
+        <div class="d-none" id="search-menu">
+            <h1>Search results</h1>
+            <div class="row" style="margin-top: 20px;margin-bottom: 20px">
+                <div class="col-md-4">
+                    <p class="mini-header">Types</p>
+                    <div>
+                        <input type="checkbox" class="c-checkbox" id="search-option-classes" checked>
+                        <span>Classes</span>
+                    </div>
+                    <div>
+                        <input type="checkbox" class="c-checkbox" id="search-option-interfaces" checked>
+                        <span>Interfaces</span>
+                    </div>
+                    <div>
+                        <input type="checkbox" class="c-checkbox" id="search-option-enums" checked>
+                        <span>Enums</span>
+                    </div>
+                    <div>
+                        <input type="checkbox" class="c-checkbox" id="search-option-functions" checked>
+                        <span>Functions</span>
+                    </div>
+                    <div>
+                        <input type="checkbox" class="c-checkbox" id="search-option-types" checked>
+                        <span>Type aliases</span>
+                    </div>
+                    <div>
+                        <input type="checkbox" class="c-checkbox" id="search-option-constants">
+                        <span>Constants</span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <p class="mini-header">Members</p>
+                    <div>
+                        <div>
+                            <input type="checkbox" class="c-checkbox" id="search-option-properties" checked>
+                            <span>Properties</span>
+                        </div>
+                        <div>
+                            <input type="checkbox" class="c-checkbox" id="search-option-methods" checked>
+                            <span>Methods</span>
+                        </div>
+                        <div>
+                            <input type="checkbox" class="c-checkbox" id="search-option-getters" checked>
+                            <span>Getters</span>
+                        </div>
+                        <div>
+                            <input type="checkbox" class="c-checkbox" id="search-option-setters" checked>
+                            <span>Setters</span>
+                        </div>
+                        <div>
+                            <input type="checkbox" class="c-checkbox" id="search-option-enum-members">
+                            <span>Enum members</span>
+                        </div>
+                        <div>
+                            <input type="checkbox" class="c-checkbox" id="search-option-privates">
+                            <span>Show privates</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <p class="mini-header">Other</p>
+                    <div>
+                        <div>
+                            <input type="checkbox" class="c-checkbox" id="search-option-this-module-only">
+                            <span>In this module only</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+            <div id="search-result-list">
+        
+            </div>
+        </div>        <div id="content-main" class="d-none">
+          
+
+<div>
+    <h1>
+    Module
+    <span class="referenceLink module">among-us-client</span>
+    <a href=https://github.com/GoogleFeud/among-us-client/tree/main/src>
+<span class="float-end sourceCode">
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-code-slash" viewBox="0 0 16 16">
+  <path d="M10.478 1.647a.5.5 0 1 0-.956-.294l-4 13a.5.5 0 0 0 .956.294l4-13zM4.854 4.146a.5.5 0 0 1 0 .708L1.707 8l3.147 3.146a.5.5 0 0 1-.708.708l-3.5-3.5a.5.5 0 0 1 0-.708l3.5-3.5a.5.5 0 0 1 .708 0zm6.292 0a.5.5 0 0 0 0 .708L14.293 8l-3.147 3.146a.5.5 0 0 0 .708.708l3.5-3.5a.5.5 0 0 0 0-.708l-3.5-3.5a.5.5 0 0 0-.708 0z"></path>
+</svg>
+</span></a>
+    </h1>
+
+    <h1 id="among-us-client" class="section-header">among-us-client</h1><p>Get and modify data from a local among us game. This library was <strong>NOT</strong> made so you can cheat in public lobbies. That&#39;s for losers. </p>
+<p><strong>This library is NOWHERE near stable. There are a lot of known bugs and also a ton of missing features. Expect every new commit to contain a breaking change. We&#39;re looking for contributors!</strong></p>
+<h2 id="install" class="section-header">Install</h2><h3 id="requirements" class="section-header">Requirements</h3><ul>
+<li>Windows</li>
+<li>Latest among us version (2020.12.9)</li>
+<li>Node.js 14+</li>
+</ul>
+<h3 id="install-1" class="section-header">Install</h3><p><strong>This library will be published to npm when we think it&#39;s ready.</strong><br>For now you can:</p>
+<ul>
+<li>Clone or download this repository</li>
+<li>Install all dependencies and dev-dependencies (<code>npm i</code>) </li>
+<li>Transpile the source code to javascript, if you don&#39;t use typescript (<code>tsc</code>)</li>
+<li>Import the AmongUsProcess where you need it!</li>
+</ul>
+<h2 id="documentation" class="section-header">Documentation</h2><p><strong>Link:</strong> <a href="https://googlefeud.github.io/among-us-client/">https://googlefeud.github.io/among-us-client/</a></p>
+<h2 id="examples" class="section-header">Examples</h2><h3 id="listen-to-in-game-events" class="section-header">Listen to in-game events</h3><pre><code class="hljs"><span class="hljs-keyword">const</span> <span class="hljs-title class_">AmongUsProcess</span> = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;among-us-client&quot;</span>);
 
 <span class="hljs-comment">// Scan for an among us process</span>
-AmongUsProcess.scan(<span class="hljs-function">(<span class="hljs-params">proc</span>) =&gt;</span> {
-    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;Connected to an among us process!&quot;</span>);
-
-    proc.on(<span class="hljs-string">&quot;joinGame&quot;</span>, <span class="hljs-function">(<span class="hljs-params">game</span>) =&gt;</span> {
-        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`User joined a game with code <span class="hljs-subst">${game.code}</span>`</span>);
+<span class="hljs-title class_">AmongUsProcess</span>.<span class="hljs-title function_">scan</span>(<span class="hljs-function">(<span class="hljs-params">proc</span>) =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;Connected to an among us process!&quot;</span>);
+    
+    proc.<span class="hljs-title function_">on</span>(<span class="hljs-string">&quot;joinGame&quot;</span>, <span class="hljs-function">(<span class="hljs-params">game</span>) =&gt;</span> {
+        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`User joined a game with code <span class="hljs-subst">${game.code}</span>`</span>);
         <span class="hljs-comment">// Set the player speed </span>
-        game.setPlayerSpeed(<span class="hljs-number">10</span>); <span class="hljs-comment">// Super super fast!</span>
+        game.<span class="hljs-title function_">setPlayerSpeed</span>(<span class="hljs-number">10</span>); <span class="hljs-comment">// Super super fast!</span>
     });
 
-    proc.on(<span class="hljs-string">&quot;leaveGame&quot;</span>, <span class="hljs-function">(<span class="hljs-params">game</span>) =&gt;</span> {
-        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`User left a game with code <span class="hljs-subst">${game.code}</span>`</span>);
+    proc.<span class="hljs-title function_">on</span>(<span class="hljs-string">&quot;leaveGame&quot;</span>, <span class="hljs-function">(<span class="hljs-params">game</span>) =&gt;</span> {
+        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`User left a game with code <span class="hljs-subst">${game.code}</span>`</span>);
     });
 
-    proc.on(<span class="hljs-string">&quot;startGame&quot;</span>, <span class="hljs-function">(<span class="hljs-params">game</span>) =&gt;</span> {
-        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`Game with code <span class="hljs-subst">${game.code}</span> is starting!`</span>);
+    proc.<span class="hljs-title function_">on</span>(<span class="hljs-string">&quot;startGame&quot;</span>, <span class="hljs-function">(<span class="hljs-params">game</span>) =&gt;</span> {
+        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`Game with code <span class="hljs-subst">${game.code}</span> is starting!`</span>);
     });
 
-    proc.on(<span class="hljs-string">&quot;endGame&quot;</span>, <span class="hljs-function">(<span class="hljs-params">game</span>) =&gt;</span> {
-        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`Game with code <span class="hljs-subst">${game.code}</span> has ended!`</span>);
+    proc.<span class="hljs-title function_">on</span>(<span class="hljs-string">&quot;endGame&quot;</span>, <span class="hljs-function">(<span class="hljs-params">game</span>) =&gt;</span> {
+        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`Game with code <span class="hljs-subst">${game.code}</span> has ended!`</span>);
     });
 
-    proc.on(<span class="hljs-string">&quot;close&quot;</span>, <span class="hljs-function">() =&gt;</span> {
-        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;User closed Among Us!&quot;</span>);
+    proc.<span class="hljs-title function_">on</span>(<span class="hljs-string">&quot;close&quot;</span>, <span class="hljs-function">() =&gt;</span> {
+        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;User closed Among Us!&quot;</span>);
     });
 
-    proc.on(<span class="hljs-string">&quot;tasks&quot;</span>, <span class="hljs-function">(<span class="hljs-params">game</span>) =&gt;</span> {
-        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`There are <span class="hljs-subst">${game.getTotalTasks() - game.getCompletedTasks()}</span> tasks left!`</span>);
+    proc.<span class="hljs-title function_">on</span>(<span class="hljs-string">&quot;tasks&quot;</span>, <span class="hljs-function">(<span class="hljs-params">game</span>) =&gt;</span> {
+        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`There are <span class="hljs-subst">${game.getTotalTasks() - game.getCompletedTasks()}</span> tasks left!`</span>);
     });
 });
-</code></pre>
-				<a href="#get-all-alive-impostors" id="get-all-alive-impostors" style="color: inherit; text-decoration: none;">
-					<h3>Get all alive impostors</h3>
-				</a>
-				<pre><code class="language-js">proc.on(<span class="hljs-string">&quot;startGame&quot;</span>, <span class="hljs-function"><span class="hljs-params">game</span> =&gt;</span> {
-    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`Impostors: `</span>, game.players.filter(<span class="hljs-function"><span class="hljs-params">p</span> =&gt;</span> p.isImpostor &amp;&amp; !p.isDead &amp;&amp; !p.disconnected).map(<span class="hljs-function"><span class="hljs-params">p</span> =&gt;</span> p.name));
+</code></pre><h3 id="get-all-alive-impostors" class="section-header">Get all alive impostors</h3><pre><code class="hljs">proc.<span class="hljs-title function_">on</span>(<span class="hljs-string">&quot;startGame&quot;</span>, <span class="hljs-function"><span class="hljs-params">game</span> =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`Impostors: `</span>, game.<span class="hljs-property">players</span>.<span class="hljs-title function_">filter</span>(<span class="hljs-function"><span class="hljs-params">p</span> =&gt;</span> p.<span class="hljs-property">isImpostor</span> &amp;&amp; !p.<span class="hljs-property">isDead</span> &amp;&amp; !p.<span class="hljs-property">disconnected</span>).<span class="hljs-title function_">map</span>(<span class="hljs-function"><span class="hljs-params">p</span> =&gt;</span> p.<span class="hljs-property">name</span>));
+});</code></pre><h3 id="do-something-when-somebody-gets-murdered" class="section-header">Do something when somebody gets murdered</h3><p><strong>Note: The killer parameter is a complete guess - the player who is the closest to the body is assumed to be the killer.</strong></p>
+<pre><code class="hljs">proc.<span class="hljs-title function_">on</span>(<span class="hljs-string">&quot;playerDie&quot;</span>, <span class="hljs-function">(<span class="hljs-params">player, killer</span>) =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`<span class="hljs-subst">${player.name}</span> got murdered by <span class="hljs-subst">${killer ? killer.name:<span class="hljs-string">&quot;unknown&quot;</span>}</span>!`</span>);
 });</code></pre>
-				<a href="#do-something-when-somebody-gets-murdered" id="do-something-when-somebody-gets-murdered" style="color: inherit; text-decoration: none;">
-					<h3>Do something when somebody gets murdered</h3>
-				</a>
-				<p><strong>Note: The killer parameter is a complete guess - the player who is the closest to the body is assumed to be the killer.</strong></p>
-				<pre><code class="language-js">proc.on(<span class="hljs-string">&quot;playerDie&quot;</span>, <span class="hljs-function">(<span class="hljs-params">player, killer</span>) =&gt;</span> {
-    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`<span class="hljs-subst">${player.name}</span> got murdered by <span class="hljs-subst">${killer ? killer.name:<span class="hljs-string">&quot;unknown&quot;</span>}</span>!`</span>);
-});</code></pre>
-			</div>
-			<!--{&quot;options&quot;:&quot;D:\\Programs\\----------Node Modules------------\\among-us-client&quot;,&quot;tsconfig&quot;:&quot;D:\\Programs\\----------Node Modules------------\\among-us-client&quot;,&quot;inputFiles&quot;:[&quot;D:/Programs/----------Node Modules------------/among-us-client/src/AmongUsProcess.ts&quot;,&quot;D:/Programs/----------Node Modules------------/among-us-client/src/index.ts&quot;,&quot;D:/Programs/----------Node Modules------------/among-us-client/src/memoryjs.d.ts&quot;,&quot;D:/Programs/----------Node Modules------------/among-us-client/src/Collectors/PlayerCollector.ts&quot;,&quot;D:/Programs/----------Node Modules------------/among-us-client/src/Structures/Game.ts&quot;,&quot;D:/Programs/----------Node Modules------------/among-us-client/src/Structures/Player.ts&quot;,&quot;D:/Programs/----------Node Modules------------/among-us-client/src/util/AmongUsAddressData.ts&quot;,&quot;D:/Programs/----------Node Modules------------/among-us-client/src/util/Constants.ts&quot;,&quot;D:/Programs/----------Node Modules------------/among-us-client/src/util/utils.ts&quot;],&quot;mode&quot;:1,&quot;includeDeclarations&quot;:false,&quot;entryPoint&quot;:&quot;&quot;,&quot;exclude&quot;:[],&quot;externalPattern&quot;:[],&quot;excludeExternals&quot;:false,&quot;excludeNotExported&quot;:false,&quot;excludeNotDocumented&quot;:false,&quot;excludePrivate&quot;:false,&quot;excludeProtected&quot;:false,&quot;ignoreCompilerErrors&quot;:false,&quot;disableSources&quot;:false,&quot;includes&quot;:&quot;&quot;,&quot;media&quot;:&quot;&quot;,&quot;out&quot;:&quot;./docs&quot;,&quot;json&quot;:&quot;&quot;,&quot;theme&quot;:&quot;./node_modules/typedoc-neo-theme/bin/default&quot;,&quot;name&quot;:&quot;&quot;,&quot;includeVersion&quot;:false,&quot;excludeTags&quot;:[],&quot;readme&quot;:&quot;&quot;,&quot;defaultCategory&quot;:&quot;Other&quot;,&quot;categoryOrder&quot;:[],&quot;categorizeByGroup&quot;:true,&quot;gitRevision&quot;:&quot;&quot;,&quot;gitRemote&quot;:&quot;origin&quot;,&quot;gaID&quot;:&quot;&quot;,&quot;gaSite&quot;:&quot;auto&quot;,&quot;hideGenerator&quot;:false,&quot;toc&quot;:[],&quot;disableOutputCheck&quot;:false,&quot;help&quot;:false,&quot;version&quot;:false,&quot;plugin&quot;:[],&quot;logger&quot;:&quot;console&quot;,&quot;listInvalidSymbolLinks&quot;:false}-->
-		</div>
-		<div class="col-2 col-menu secondary-menu">
-			<nav class="tsd-navigation secondary menu-sticky">
-				<ul class="before-current">
-				</ul>
-			</nav>
-		</div>
-	</div>
+
+    
+    
+    <h2>Exports</h2>
+    <div><span><span class="c-tooltip"><a class="reference-link object" href="type\ScanCallback.html">ScanCallback</a><span class="c-tooltip-content"><span class="keyword">type</span> <span class="item-name object">ScanCallback</span><span style="display:block" class="monospace fw-bold"><span class="item-name object">ScanCallback</span></span></span></span></span></div><div><span><span class="c-tooltip"><a class="reference-link object" href="interface\AmongUsProcessSettings.html">AmongUsProcessSettings</a><span class="c-tooltip-content"><span class="keyword">interface</span> <span class="item-name object">AmongUsProcessSettings</span><span style="display:block" class="monospace fw-bold"><span class="item-name object">AmongUsProcessSettings</span></span></span></span></span></div><div><span><span class="c-tooltip"><a class="reference-link object" href="class\AmongUsProcess.html">AmongUsProcess</a><span class="c-tooltip-content"><span class="keyword">class</span> <span class="item-name object">AmongUsProcess</span><span style="display:block" class="monospace fw-bold"><span class="item-name object">AmongUsProcess</span></span></span></span></span></div>
+    
+    
+    <h2>Re-Exports</h2>
+    <div><span class="keyword">exports</span> <span class="symbol">*</span>  <span class="keyword">from</span> <span><span class="c-tooltip"><a class="reference-link module" href="m.Collectors\index.html">Collectors</a><span class="c-tooltip-content"><span class="keyword">module</span> <span class="item-name module">Collectors</span><span style="display:block" class="monospace fw-bold">Collectors</span></span></span></span></div><div><span class="keyword">exports</span> <span class="symbol">*</span>  <span class="keyword">from</span> <span><span class="c-tooltip"><a class="reference-link module" href="m.Structures\index.html">Structures</a><span class="c-tooltip-content"><span class="keyword">module</span> <span class="item-name module">Structures</span><span style="display:block" class="monospace fw-bold">Structures</span></span></span></span></div>
+    
+    
+    
 </div>
-<footer class="with-border-bottom">
-</footer>
-<div class="container tsd-generator">
-	<p>Generated using <a href="http://typedoc.org/" target="_blank">TypeDoc</a></p>
-</div>
-<div class="overlay"></div>
-<script src="assets/js/main.js"></script>
+        </div>
+
+      </div>
+
+      </div>
+  </div>
+
+  <div id="to-top" class="btn-to-top">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-arrow-up" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z"/>
+  </svg>
+  </div>
+
+  <div id="sidebar-arrow" class="sidebar-arrow">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
+  </svg>
+  </div>
+
+
 </body>
+
 </html>

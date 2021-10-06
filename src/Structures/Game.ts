@@ -1,6 +1,6 @@
 import { AmongUsProcess } from "../AmongUsProcess";
 import * as MemoryJS from "memoryjs";
-import {PlayerCollector} from "../Collectors/PlayerCollector";
+import {PlayerCollector} from "../Collectors";
 
 
 export class Game {

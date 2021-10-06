@@ -1,7 +1,6 @@
 import { Game } from "./Game";
 import Structon from "structron";
 import * as MemoryJS from "memoryjs";
-import { AmongUsProcess } from "../AmongUsProcess";
 import { findClosestPlayer } from "../util/utils";
 import { AMONG_US_STATES, PLAYER_COLORS } from "../util/Constants";
 

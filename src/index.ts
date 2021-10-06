@@ -1,4 +1,4 @@
-import {AmongUsProcess} from "./AmongUsProcess";
 
-
-export default AmongUsProcess;
+export * from "./AmongUsProcess";
+export * from "./Collectors";
+export * from "./Structures";

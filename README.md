@@ -30,7 +30,7 @@ For now you can:
 ### Listen to in-game events
 
 ```js
-const AmongUsProcess = require("among-us-client");
+const {AmongUsProcess} = require("among-us-client");
 
 // Scan for an among us process
 AmongUsProcess.scan((proc) => {
